@@ -294,6 +294,26 @@ STRING
     Parser.current_statement(text, 71, :sqlplus_commands => true, :plsql_blocks => false)[:statement].should eq("\nbegin\n  null;")
     Parser.current_statement(text, 71, :sqlplus_commands => true, :plsql_blocks => true)[:statement].should eq("\nbegin\n  null;\nend;\n/\n")
     Parser.current_statement(text, 88, :sqlplus_commands => true, :plsql_blocks => true)[:statement].should eq("select c2 from t1\n/\n")
+
+  	text = <<STRING
+select * from all_objects where rownum <= 1000;
+
+set serveroutput on
+begin
+	dbms_output.put_line('Hello Vorax!');
+end;
+/
+
+with
+  x as (select * 
+  	      from (select file_id, file_name from dba_data_files) t,
+  	           (select * from (select 'abc' col1, 'xyz' col2 from dual) x)
+  	   )
+select *
+  from x;
+STRING
+    Parser.current_statement(text, 90, :sqlplus_commands => true, :plsql_blocks => true).
+    	should eq({:statement=>"begin\n\tdbms_output.put_line('Hello Vorax!');\nend;\n/\n", :range=>69...121})
   end# }}}
 
 end

@@ -303,9 +303,32 @@ module Vorax
       if opts[:sqlplus_commands]
         walker.register_spot(Parser::SQLPLUS_TERMINATOR) do |scanner|
           type = Parser.statement_type(scanner.string[(start_pos..scanner.pos)])
-          if type && type == 'SQLPLUS' && (start_pos..scanner.pos).include?(position)
-            end_pos = scanner.pos - scanner.matched.length
-            scanner.terminate
+          if type
+          	if type == 'SQLPLUS'
+							if (start_pos..scanner.pos-1).include?(position)
+								end_pos = scanner.pos - scanner.matched.length
+								scanner.terminate
+							else
+								start_pos = scanner.pos
+							end
+						else
+							if opts[:plsql_blocks]
+								#this is a plsql block, eat till the slash terminator
+								if scanner.scan_until(Parser::SLASH_TERMINATOR)
+									if (start_pos..scanner.pos-1).include?(position)
+										end_pos = scanner.pos
+										scanner.terminate
+									else
+										start_pos = scanner.pos
+									end
+								else
+									#it's an invalid statement
+									scanner.terminate
+								end
+							end
+						end
+					#else
+            #start_pos = scanner.pos
           end
         end
       end
