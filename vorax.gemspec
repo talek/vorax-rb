@@ -17,5 +17,9 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
 
+  gem.add_runtime_dependency "nokogiri"
+  gem.add_runtime_dependency "childprocess"
+  gem.add_runtime_dependency "rubytree"
+
   gem.add_development_dependency "rspec", "~> 2.6"
 end
