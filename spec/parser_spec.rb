@@ -314,6 +314,10 @@ select *
 STRING
     Parser.current_statement(text, 90, :sqlplus_commands => true, :plsql_blocks => true).
     	should eq({:statement=>"begin\n\tdbms_output.put_line('Hello Vorax!');\nend;\n/\n", :range=>69...121})
+
+  	text = "exec dbms_crypto.encrypt("
+  	Parser.current_statement(text, 10, :plslq_blocks => true, :sqlplus_commands => true).
+  		should eq({:statement=>"exec dbms_crypto.encrypt(", :range=>0...25})
   end# }}}
 
 end

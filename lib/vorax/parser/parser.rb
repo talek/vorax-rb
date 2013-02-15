@@ -334,6 +334,7 @@ module Vorax
       end
 
       walker.walk
+			end_pos = script_content.length if end_pos == 0 #partial statement
       {:statement => script_content[(start_pos...end_pos)], :range => (start_pos...end_pos)}
 
     end
