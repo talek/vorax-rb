@@ -18,7 +18,7 @@ end
 
 desc 'Builds and installs the gem'
 task :install => :build do
-  sh "gem install vorax-#{Vorax::VERSION}"
+  sh "gem install vorax-#{Vorax::VERSION} --no-rdoc --no-ri"
 end
 
 desc 'Tags version, pushes to remote, and pushes gem'
