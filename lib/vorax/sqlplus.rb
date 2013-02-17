@@ -5,11 +5,6 @@ module Vorax
   # Provides integration with Oracle SqlPlus CLI tool.
   class Sqlplus
 
-    # the tail size of the output chunk to be searched
-    # for the output END_MARKER.
-    TAIL_LENGTH = 100 unless defined?(TAIL_LENGTH)
-    private_constant :TAIL_LENGTH
-
     attr_reader :bin_file, :default_funnel_name, :process
     
     # Creates a new sqlplus instance.
@@ -38,6 +33,14 @@ module Vorax
       @registered_convertors = {:vertical => Output::VerticalConvertor,
                                 :pagezip => Output::PagezipConvertor,
                                 :tablezip => Output::TablezipConvertor}
+      # warm up
+      sleep 0.2
+			# set the blockterm as the end_marker. The blockterm should
+			# not be touch by the Vorax user, otherwise nasty things
+			# may happen. This is also a workaround to mark the end of
+			# output when the "echo" setting of sqlplus is "on". See the
+			# implementation of pack().
+      send_text("set blockterm \"#@end_marker\"\n")
     end
 
     # Set the default convertor for the output returned by sqlplus.
@@ -83,7 +86,6 @@ module Vorax
     def exec(command, params = {})
       Vorax.debug("exec: command=#{command.inspect} params=#{params.inspect}")
       raise AnotherExecRunning if busy?
-      @tail = ""
       opts = {
         :prep => nil,
         :post => nil,
@@ -139,27 +141,13 @@ module Vorax
     # @return the output chunk
     def read_output(bytes=4086)
       output = ""
-      raw_output = @tail
+      raw_output = nil
       begin
-        raw_output << (@io_read.read_nonblock(bytes) || '').gsub(/\r/, '')
+        raw_output = @io_read.read_nonblock(bytes)
       rescue Errno::EAGAIN
       end
       if raw_output
-        #p raw_output if raw_output
-        if @tail.empty?
-          # The logic of tail: when SET ECHO ON is used, the PRO <end_marker>
-          # statement will be also part of the output. The user will end up
-          # with something like "SQL> pro" as the last line. The solution would
-          # be to search for "pro <end_marker>" and to stop just before "pro", but
-          # the chunk may be split in the middle of the "pro <end_marker>" text and
-          # this is something which depends on the output of the executed
-          # statement (e.g. bytes=4086, output=4084 => chunk="...SQL> p"). The
-          # workaround is to delay sending the last TAIL_LENGTH characters until
-          # the next fetch.
-          raw_output, @tail = raw_output.slice!(0...raw_output.length-TAIL_LENGTH), raw_output
-        else
-          @tail = ''
-        end
+        raw_output.gsub!(/\r/, '')
         scanner = StringScanner.new(raw_output)
         while not scanner.eos?
           if @look_for == @start_marker
@@ -180,7 +168,6 @@ module Vorax
           if @look_for == @end_marker
             output = scanner.scan(/[^#{@look_for}]*/)
             if scanner.scan(/#{@look_for}/)
-              output.gsub!(/\n.*?pro \z/, "")
               # end of output reached
               scanner.terminate
               @busy = false
@@ -267,8 +254,13 @@ module Vorax
           f.puts opts[:prep]
           f.puts "#pro #@start_marker"
           f.puts command.strip
+					# we assume that the @end_marker is also
+					# set as a block terminator. If "set echo on"
+					# the output region will end here since the
+					# block terminator command will be echoed. Otherwise,
+					# the next prompt statement will do the job.
+					f.puts "#{@end_marker}"
           f.puts "#pro #@end_marker"
-          f.puts "."
           f.puts opts[:post]
         end
       end
