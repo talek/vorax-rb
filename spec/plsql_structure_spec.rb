@@ -20,24 +20,25 @@ describe 'plsql structure' do
         @result << (node.has_children? ? "+" : ">")
       end
 
-      @result << " #{node.name} - #{(node.content ? node.content.end_pos : '')}\n"
+      @result << " #{node.name} - #{(node.content ? node.content.end_pos : '')} -> begin=#{(node.content ? node.content.body_start_pos : '')}\n"
 
       node.children { |child| compute_tree(child, level + 1)}
     end
 
     compute_tree(structure.tree)
-    @result.should eq(<<STR
-* root - 
-|---+ test[SPEC]: 25 - 154
-|    |---> test[PROCEDURE]: 70 - 70
-|    +---> muci[FUNCTION]: 99 - 99
-|---+ test[BODY]: 180 - 876
-|    |---> private_proc[PROCEDURE]: 241 - 394
-|    +---> xyz[PROCEDURE]: 414 - 451
-|---> test[PROCEDURE]: 890 - 0
-+---> anonymous[BLOCK]: 969 - 1040
-STR
-)
+    puts @result
+    #@result.should eq(<<STR
+#* root - 
+#|---+ test[SPEC]: 25 - 154
+#|    |---> test[PROCEDURE]: 70 - 70
+#|    +---> muci[FUNCTION]: 99 - 99
+#|---+ test[BODY]: 180 - 876
+#|    |---> private_proc[PROCEDURE]: 241 - 394
+#|    +---> xyz[PROCEDURE]: 414 - 451
+#|---> test[PROCEDURE]: 890 - 0
+#+---> anonymous[BLOCK]: 969 - 1040
+#STR
+#)
   end
 
 end

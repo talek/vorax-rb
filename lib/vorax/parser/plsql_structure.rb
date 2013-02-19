@@ -8,7 +8,7 @@ module Vorax
 
     class Region
 
-      attr_accessor :start_pos, :end_pos
+      attr_accessor :start_pos, :end_pos, :body_start_pos
       attr_reader :name, :type
 
       def initialize(name, type, start_pos = 0, end_pos = 0)
@@ -16,6 +16,7 @@ module Vorax
         @type = type
         @start_pos = start_pos
         @end_pos = end_pos
+      	@body_start_pos = 0
       end
 
       def to_s
@@ -106,7 +107,7 @@ module Vorax
             subprog_type = 'PROCEDURE'
           end
           start_pos = scanner.pos - scanner.matched.length
-          region = Region.new(subprog_name, subprog_type, scanner.pos)
+          region = Region.new(subprog_name, subprog_type, start_pos)
           node = Tree::TreeNode.new(region.to_s, region)
           @current_parent << node
           if @current_parent && @current_parent.content 
@@ -126,8 +127,13 @@ module Vorax
           if @begin_level > 1
             # start a new region
             region = Region.new('anonymous', 'BLOCK', scanner.pos)
+            region.body_start_pos = scanner.pos - scanner.matched.length
             @level += 1
             assign_parent(@current_parent << Tree::TreeNode.new(region.to_s, region))
+          else
+          	if @current_parent && @current_parent.content
+							@current_parent.content.body_start_pos = scanner.pos - scanner.matched.length
+						end
           end
         end
       end

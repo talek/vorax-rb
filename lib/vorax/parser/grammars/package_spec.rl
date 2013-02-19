@@ -12,7 +12,7 @@ action end_identifier {
   @end = p - 1
 }
 
-terminator = (';' ws*) | (ws+ (K_AS | K_IS) ws+);
+terminator = (';' ws*) | (ws+ (K_AS | K_IS | K_DECLARE) ws+);
 id = identifier >start_identifier %end_identifier;
 variable_name = id - (K_CURSOR | K_TYPE | K_FUNCTION | K_PROCEDURE | K_END | K_PRAGMA);
 
