@@ -54,6 +54,7 @@ module Vorax
       end
 
       def tree
+				@root.each { |t| t.content.end_pos = @text.length if t.content && t.content.end_pos == 0 }
         @root
       end
       
@@ -110,13 +111,11 @@ module Vorax
           region = Region.new(subprog_name, subprog_type, start_pos)
           node = Tree::TreeNode.new(region.to_s, region)
           @current_parent << node
-          if @current_parent && @current_parent.content 
-            if @current_parent.content.type != 'SPEC'
-              @level += 1
-              assign_parent(node)
-            else
-              node.content.end_pos = node.content.start_pos
-            end
+          if @current_parent && @current_parent.content && @current_parent.content.type == 'SPEC'
+						node.content.end_pos = node.content.start_pos
+          else
+						@level += 1
+						assign_parent(node)
           end
         end
       end
