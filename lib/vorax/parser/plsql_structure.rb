@@ -8,7 +8,7 @@ module Vorax
 
     class Region
 
-      attr_accessor :start_pos, :end_pos, :body_start_pos
+      attr_accessor :start_pos, :end_pos, :body_start_pos, :context
       attr_reader :name, :type
 
       def initialize(name, type, start_pos = 0, end_pos = 0)
@@ -17,6 +17,7 @@ module Vorax
         @start_pos = start_pos
         @end_pos = end_pos
       	@body_start_pos = 0
+      	@context = nil
       end
 
       def to_s
@@ -147,6 +148,7 @@ module Vorax
 					if handler[:end_pos] > 0
 						region = Region.new('for', 'FOR_BLOCK', scanner.pos - scanner.matched.length + 1)
 						region.body_start_pos = region.start_pos + handler[:end_pos]
+            region.context = handler
             assign_parent(@current_parent << Tree::TreeNode.new(region.to_s, region))
 						scanner.pos = region.body_start_pos
 						@level += 1
