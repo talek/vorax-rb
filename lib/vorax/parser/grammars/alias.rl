@@ -3,17 +3,14 @@
 machine alias;
 
 action tableref_start {
-  #puts "tableref_start: p=#{p}"
   @t_start = p
 }
 
 action tableref_end {
   @table_ref = data[(@t_start..p-1)]
-  #puts "tableref_end: @table_ref=#@table_ref"
 }
 
 action alias_start {
-  #puts "alias_start: p=#{p}"
   @a_start = p
   @alias_value = nil
 }
@@ -21,21 +18,17 @@ action alias_start {
 action alias_end {
   text = data[(@a_start..p-1)]
   @alias_value = text unless @not_alias.include?(text.upcase)
-  #puts "alias_end: @alias_value=#@alias_value"
 }
 
 action subquery_start {
-  #puts "subquery_start: p=#{p}"
   @subquery_text = Parser.walk_balanced_paren(data[(p..-1)]).gsub(/^\(|\)$/, '')
   p += 1
   @subquery_range = (p..p+@subquery_text.length-1)
   p += @subquery_text.length
   te = p
-  #puts "subquery_end: p=#{p} @subquery_text=#@subquery_text @subquery_range=#@subquery_range"
 }
 
 action before_with {
-  #puts "before_with: p=#{p}"
   @alias_value = nil
   @subquery_range = nil
   @subquery_text = nil
@@ -46,11 +39,9 @@ action after_with {
   @alias_value = nil
   @subquery_range = nil
   @subquery_text = nil
-  #puts "after_with"
 }
 
 action before_tref {
-  #puts "before_tref: p=#{p} @alias_value=#@alias_value @subquery_text=#@subquery_text @subquery_range=#@subquery_range"
   add_tableref
 }
 

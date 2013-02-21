@@ -19,16 +19,28 @@ action mark_end_def {
   @type = 'END';
 }
 
+action mark_end_loop {
+  @end_pos = p - 1;
+  @type = 'END_LOOP';
+}
+
+action mark_end_if {
+  @end_pos = p - 1;
+  @type = 'END_IF';
+}
+
 action plsql_name {
   @name = data[(@start..p-1)]
 }
 
 subprog_name = identifier - (K_IF | K_LOOP);
 end_def = (K_END ws* ';' | K_END ws+ subprog_name ws* ';') @mark_end_def;
+end_loop = (K_END ws* K_LOOP ws* ';') @mark_end_loop;
+end_if = (K_END ws* K_IF ws* ';') @mark_end_if;
 name = ((identifier '.' identifier) | identifier) >{@start = p} %plsql_name;
 spec = (K_PACKAGE | K_TYPE) ws+ name ws+ (K_AS | K_IS) ws+ @mark_spec_end;
 body = (K_PACKAGE | K_TYPE) ws+ K_BODY ws+ name ws+ (K_AS | K_IS) ws+ @mark_body_end;
-main := body | spec | end_def;
+main := body | spec | end_loop | end_if | end_def;
 
 }%%
 
@@ -44,6 +56,8 @@ module Vorax
     #   fragment ends (immediatelly after "AS|IS"), :type => 'SPEC' or 'BODY'.
     def self.plsql_def(data)
       @end_pos = -1
+      @name = ""
+      @type = ""
       if data
         eof = data.length
         %% write data;

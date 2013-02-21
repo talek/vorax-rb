@@ -1,7 +1,7 @@
 
 # line 1 "lib/vorax/parser/grammars/alias.rl"
 
-# line 81 "lib/vorax/parser/grammars/alias.rl"
+# line 72 "lib/vorax/parser/grammars/alias.rl"
 
 
 module Vorax
@@ -544,7 +544,7 @@ end
 self.alias_en_main = 131;
 
 
-# line 104 "lib/vorax/parser/grammars/alias.rl"
+# line 95 "lib/vorax/parser/grammars/alias.rl"
         
 # line 550 "lib/vorax/parser/grammars/alias.rb"
 begin
@@ -556,7 +556,7 @@ begin
 	act = 0
 end
 
-# line 105 "lib/vorax/parser/grammars/alias.rl"
+# line 96 "lib/vorax/parser/grammars/alias.rl"
         
 # line 562 "lib/vorax/parser/grammars/alias.rb"
 begin
@@ -658,68 +658,59 @@ when 0 then
 # line 5 "lib/vorax/parser/grammars/alias.rl"
 		begin
 
-  #puts "tableref_start: p=#{p}"
   @t_start = p
 		end
 when 1 then
-# line 10 "lib/vorax/parser/grammars/alias.rl"
+# line 9 "lib/vorax/parser/grammars/alias.rl"
 		begin
 
   @table_ref = data[(@t_start..p-1)]
-  #puts "tableref_end: @table_ref=#@table_ref"
 		end
 when 2 then
-# line 15 "lib/vorax/parser/grammars/alias.rl"
+# line 13 "lib/vorax/parser/grammars/alias.rl"
 		begin
 
-  #puts "alias_start: p=#{p}"
   @a_start = p
   @alias_value = nil
 		end
 when 3 then
-# line 21 "lib/vorax/parser/grammars/alias.rl"
+# line 18 "lib/vorax/parser/grammars/alias.rl"
 		begin
 
   text = data[(@a_start..p-1)]
   @alias_value = text unless @not_alias.include?(text.upcase)
-  #puts "alias_end: @alias_value=#@alias_value"
 		end
 when 4 then
-# line 27 "lib/vorax/parser/grammars/alias.rl"
+# line 23 "lib/vorax/parser/grammars/alias.rl"
 		begin
 
-  #puts "subquery_start: p=#{p}"
   @subquery_text = Parser.walk_balanced_paren(data[(p..-1)]).gsub(/^\(|\)$/, '')
   p += 1
   @subquery_range = (p..p+@subquery_text.length-1)
   p += @subquery_text.length
   te = p
-  #puts "subquery_end: p=#{p} @subquery_text=#@subquery_text @subquery_range=#@subquery_range"
 		end
 when 5 then
-# line 37 "lib/vorax/parser/grammars/alias.rl"
+# line 31 "lib/vorax/parser/grammars/alias.rl"
 		begin
 
-  #puts "before_with: p=#{p}"
   @alias_value = nil
   @subquery_range = nil
   @subquery_text = nil
 		end
 when 6 then
-# line 44 "lib/vorax/parser/grammars/alias.rl"
+# line 37 "lib/vorax/parser/grammars/alias.rl"
 		begin
 
   @refs << ExprRef.new(@subquery_text, @subquery_range, @alias_value)
   @alias_value = nil
   @subquery_range = nil
   @subquery_text = nil
-  #puts "after_with"
 		end
 when 7 then
-# line 52 "lib/vorax/parser/grammars/alias.rl"
+# line 44 "lib/vorax/parser/grammars/alias.rl"
 		begin
 
-  #puts "before_tref: p=#{p} @alias_value=#@alias_value @subquery_text=#@subquery_text @subquery_range=#@subquery_range"
   add_tableref
 		end
 when 10 then
@@ -728,81 +719,81 @@ when 10 then
 te = p+1
 		end
 when 11 then
-# line 71 "lib/vorax/parser/grammars/alias.rl"
+# line 62 "lib/vorax/parser/grammars/alias.rl"
 		begin
 act = 1;		end
 when 12 then
-# line 73 "lib/vorax/parser/grammars/alias.rl"
+# line 64 "lib/vorax/parser/grammars/alias.rl"
 		begin
 act = 3;		end
 when 13 then
-# line 74 "lib/vorax/parser/grammars/alias.rl"
+# line 65 "lib/vorax/parser/grammars/alias.rl"
 		begin
 act = 4;		end
 when 14 then
-# line 78 "lib/vorax/parser/grammars/alias.rl"
+# line 69 "lib/vorax/parser/grammars/alias.rl"
 		begin
 act = 8;		end
 when 15 then
-# line 72 "lib/vorax/parser/grammars/alias.rl"
+# line 63 "lib/vorax/parser/grammars/alias.rl"
 		begin
 te = p+1
 		end
 when 16 then
-# line 78 "lib/vorax/parser/grammars/alias.rl"
+# line 69 "lib/vorax/parser/grammars/alias.rl"
 		begin
 te = p+1
 		end
 when 17 then
-# line 71 "lib/vorax/parser/grammars/alias.rl"
+# line 62 "lib/vorax/parser/grammars/alias.rl"
 		begin
 te = p
 p = p - 1;		end
 when 18 then
-# line 74 "lib/vorax/parser/grammars/alias.rl"
+# line 65 "lib/vorax/parser/grammars/alias.rl"
 		begin
 te = p
 p = p - 1; begin  @start_columns = te  end
 		end
 when 19 then
-# line 75 "lib/vorax/parser/grammars/alias.rl"
+# line 66 "lib/vorax/parser/grammars/alias.rl"
 		begin
 te = p
 p = p - 1; begin  @columns = data[(@start_columns..ts)] unless @columns  end
 		end
 when 20 then
-# line 76 "lib/vorax/parser/grammars/alias.rl"
+# line 67 "lib/vorax/parser/grammars/alias.rl"
 		begin
 te = p
 p = p - 1;		end
 when 21 then
-# line 77 "lib/vorax/parser/grammars/alias.rl"
+# line 68 "lib/vorax/parser/grammars/alias.rl"
 		begin
 te = p
 p = p - 1;		end
 when 22 then
-# line 78 "lib/vorax/parser/grammars/alias.rl"
+# line 69 "lib/vorax/parser/grammars/alias.rl"
 		begin
 te = p
 p = p - 1;		end
 when 23 then
-# line 75 "lib/vorax/parser/grammars/alias.rl"
+# line 66 "lib/vorax/parser/grammars/alias.rl"
 		begin
  begin p = ((te))-1; end
  begin  @columns = data[(@start_columns..ts)] unless @columns  end
 		end
 when 24 then
-# line 76 "lib/vorax/parser/grammars/alias.rl"
+# line 67 "lib/vorax/parser/grammars/alias.rl"
 		begin
  begin p = ((te))-1; end
 		end
 when 25 then
-# line 77 "lib/vorax/parser/grammars/alias.rl"
+# line 68 "lib/vorax/parser/grammars/alias.rl"
 		begin
  begin p = ((te))-1; end
 		end
 when 26 then
-# line 78 "lib/vorax/parser/grammars/alias.rl"
+# line 69 "lib/vorax/parser/grammars/alias.rl"
 		begin
  begin p = ((te))-1; end
 		end
@@ -821,7 +812,7 @@ end
 end
 end 
 			end
-# line 825 "lib/vorax/parser/grammars/alias.rb"
+# line 816 "lib/vorax/parser/grammars/alias.rb"
 			end # action switch
 		end
 	end
@@ -841,7 +832,7 @@ when 8 then
 # line 1 "NONE"
 		begin
 ts = nil;		end
-# line 845 "lib/vorax/parser/grammars/alias.rb"
+# line 836 "lib/vorax/parser/grammars/alias.rb"
 		end # to state action switch
 	end
 	if _trigger_goto
@@ -868,7 +859,7 @@ end
 	end
 	end
 
-# line 106 "lib/vorax/parser/grammars/alias.rl"
+# line 97 "lib/vorax/parser/grammars/alias.rl"
         data.chop!
 
         # needed to finalize the last pending tableref

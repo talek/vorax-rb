@@ -23,6 +23,9 @@ identifier = simple_identifier | dquoted_string;
 
 # define intereseting keywords
 K_END = /end/i;
+K_REVERSE = /reverse/i;
+K_FOR = /for/i;
+K_IN = /in/i;
 K_IF = /if/i;
 K_LOOP = /loop/i;
 K_PRAGMA = /pragma/i;

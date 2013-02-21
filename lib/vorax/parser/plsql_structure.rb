@@ -32,8 +32,8 @@ module Vorax
       BEGIN_MODULE = /(?:\bbegin\b)/i unless defined?(BEGIN_MODULE)
       END_MODULE = /(?:\bend\b)/i unless defined?(END_MODULE)
       FOR_STMT = /(?:\bfor\b)/i unless defined?(FOR_STMT)
-      LOOP_STMT = /(?:\bfor\b)/i unless defined?(LOOP_STMT)
-      IF_STMT = /(?:\bfor\b)/i unless defined?(LOOP_STMT)
+      LOOP_STMT = /(?:\bloop\b)/i unless defined?(LOOP_STMT)
+      IF_STMT = /(?:\bif\b)/i unless defined?(IF_STMT)
 
       attr_reader :text
 
@@ -54,7 +54,7 @@ module Vorax
       end
 
       def tree
-				@root.each { |t| t.content.end_pos = @text.length if t.content && t.content.end_pos == 0 }
+				#@root.each { |t| t.content.end_pos = @text.length if t.content && t.content.end_pos == 0 }
         @root
       end
       
@@ -69,6 +69,9 @@ module Vorax
         register_slash_terminator_spot()
         register_subprog_spot()
         register_begin_spot()
+        register_for_spot()
+        register_loop_spot()
+        register_if_spot()
         register_end_spot()
       end
 
@@ -137,6 +140,40 @@ module Vorax
         end
       end
 
+			def register_for_spot
+        @walker.register_spot(FOR_STMT) do |scanner|
+					stmt = "#{scanner.matched}#{scanner.rest}"
+					handler = Parser.describe_for(stmt)
+					if handler[:end_pos] > 0
+						region = Region.new('for', 'FOR_BLOCK', scanner.pos - scanner.matched.length + 1)
+						region.body_start_pos = region.start_pos + handler[:end_pos]
+            assign_parent(@current_parent << Tree::TreeNode.new(region.to_s, region))
+						scanner.pos = region.body_start_pos
+						@level += 1
+					end
+				end
+			end
+
+			def register_loop_spot
+        @walker.register_spot(LOOP_STMT) do |scanner|
+					stmt = "#{scanner.matched}#{scanner.rest}"
+					region = Region.new('loop', 'LOOP_BLOCK', scanner.pos - scanner.matched.length + 1)
+					region.body_start_pos = region.start_pos + 1
+					assign_parent(@current_parent << Tree::TreeNode.new(region.to_s, region))
+					@level += 1
+				end
+			end
+
+			def register_if_spot
+        @walker.register_spot(IF_STMT) do |scanner|
+					stmt = "#{scanner.matched}#{scanner.rest}"
+					region = Region.new('if', 'IF_BLOCK', scanner.pos - scanner.matched.length + 1)
+					region.body_start_pos = region.start_pos + 1
+					assign_parent(@current_parent << Tree::TreeNode.new(region.to_s, region))
+					@level += 1
+				end
+			end
+
       def register_end_spot
         @walker.register_spot(END_MODULE) do |scanner|
           # we have an "end" match. first of all check if it's not part
@@ -144,14 +181,34 @@ module Vorax
           char_behind = scanner.string[scanner.pos - scanner.matched.length - 1, 1]
           if char_behind != '$'
             metadata = Parser.plsql_def("#{scanner.matched}#{scanner.rest}")
-            if metadata[:type] == 'END' && metadata[:end_def] > 0
-              @begin_level -= 1 if @begin_level > 0
-              @level -= 1 if @level > 0
-              if @current_parent.content
-                @current_parent.content.end_pos = (scanner.pos - 1) + (metadata[:end_def] - 1)
-              end
-              assign_parent(@current_parent.parent)
-            end
+						if metadata[:end_def] > 0
+							@level -= 1 if @level > 0
+							if metadata[:type] == 'END'
+								@begin_level -= 1 if @begin_level > 0
+								if @current_parent.content
+									@current_parent.content.end_pos = (scanner.pos - 1) + (metadata[:end_def] - 1)
+								end
+								assign_parent(@current_parent.parent)
+							elsif metadata[:type] == 'END_LOOP'
+								if @current_parent.content && (@current_parent.content.type == 'FOR_BLOCK' || @current_parent.content.type == "LOOP_BLOCK")
+									@current_parent.content.end_pos = (scanner.pos - 1) + (metadata[:end_def] - 1)
+									scanner.pos = @current_parent.content.end_pos
+									assign_parent(@current_parent.parent)
+								else
+									# something's fishy
+									scanner.terminate
+								end
+							elsif metadata[:type] == 'END_IF'
+								if @current_parent.content && @current_parent.content.type == 'IF_BLOCK'
+									@current_parent.content.end_pos = (scanner.pos - 1) + (metadata[:end_def] - 1)
+									scanner.pos = @current_parent.content.end_pos
+									assign_parent(@current_parent.parent)
+								else
+									# something's fishy
+									scanner.terminate
+								end
+							end
+						end
           end
         end
       end
