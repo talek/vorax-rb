@@ -21,11 +21,12 @@ module Vorax
       # @param data the statement
       def walk(data)
         @refs = [];
+        @start_columns = 0
         @columns = nil;
         data << "\n"
         eof = data.length
         
-# line 29 "lib/vorax/parser/grammars/alias.rb"
+# line 30 "lib/vorax/parser/grammars/alias.rb"
 class << self
 	attr_accessor :_alias_actions
 	private :_alias_actions, :_alias_actions=
@@ -544,9 +545,9 @@ end
 self.alias_en_main = 131;
 
 
-# line 95 "lib/vorax/parser/grammars/alias.rl"
+# line 96 "lib/vorax/parser/grammars/alias.rl"
         
-# line 550 "lib/vorax/parser/grammars/alias.rb"
+# line 551 "lib/vorax/parser/grammars/alias.rb"
 begin
 	p ||= 0
 	pe ||= data.length
@@ -556,9 +557,9 @@ begin
 	act = 0
 end
 
-# line 96 "lib/vorax/parser/grammars/alias.rl"
+# line 97 "lib/vorax/parser/grammars/alias.rl"
         
-# line 562 "lib/vorax/parser/grammars/alias.rb"
+# line 563 "lib/vorax/parser/grammars/alias.rb"
 begin
 	_klen, _trans, _keys, _acts, _nacts = nil
 	_goto_level = 0
@@ -588,7 +589,7 @@ begin
 		begin
 ts = p
 		end
-# line 592 "lib/vorax/parser/grammars/alias.rb"
+# line 593 "lib/vorax/parser/grammars/alias.rb"
 		end # from state action switch
 	end
 	if _trigger_goto
@@ -812,7 +813,7 @@ end
 end
 end 
 			end
-# line 816 "lib/vorax/parser/grammars/alias.rb"
+# line 817 "lib/vorax/parser/grammars/alias.rb"
 			end # action switch
 		end
 	end
@@ -832,7 +833,7 @@ when 8 then
 # line 1 "NONE"
 		begin
 ts = nil;		end
-# line 836 "lib/vorax/parser/grammars/alias.rb"
+# line 837 "lib/vorax/parser/grammars/alias.rb"
 		end # to state action switch
 	end
 	if _trigger_goto
@@ -859,7 +860,7 @@ end
 	end
 	end
 
-# line 97 "lib/vorax/parser/grammars/alias.rl"
+# line 98 "lib/vorax/parser/grammars/alias.rl"
         data.chop!
 
         # needed to finalize the last pending tableref

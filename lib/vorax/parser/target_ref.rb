@@ -74,9 +74,9 @@ module Vorax
         inspector = StmtInspector.new(statement)
         columns_data = inspector.query_fields
         columns_data.each do |column|
-          if column =~ /([a-z0-9#$_]+\.)?\*/i
+          if column =~ /([a-z0-9#$\_]+\.)?\*/i
             #might be an alias
-            alias_name = column[/[a-z0-9#$_]+/]
+            alias_name = column[/[a-z0-9#$\_]+/i]
             ds = []
             if alias_name
               src = inspector.data_source.find do |r| 

@@ -88,6 +88,7 @@ module Vorax
       # @param data the statement
       def walk(data)
         @refs = [];
+        @start_columns = 0
         @columns = nil;
         data << "\n"
         eof = data.length
