@@ -4,10 +4,6 @@ include Vorax
 
 describe 'column' do
 
-	it 'should work with columns with "AS" aliases' do
-    p Parser::Column.new.walk("level as lvl, bskcmptre_tbl.*\n")
-	end
-=begin
   it 'should work with multiple columns' do
     Parser::Column.new.walk('col1, col2, f(a, b, c) x, 3+5, t.*, owner.tab.col y').should eq(["col1", "col2", "x", "t.*", "y"])
   end
@@ -38,7 +34,7 @@ describe 'column' do
   it 'should work with nested expressions' do
     Parser::Column.new.walk('f(1, g(2), x(3, 2, f(10))), my_func(col)').should eq([])
   end
-=end
+
 end
 
 
