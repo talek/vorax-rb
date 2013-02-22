@@ -1,6 +1,6 @@
 %%{
 
-machine package_spec;
+machine declare;
 
 include common "common.rl";
 
@@ -47,7 +47,7 @@ module Vorax
   module Parser
 
     # A class used to parse a PLSQL package spec.
-    class PackageSpec
+    class Declare
 
       attr_reader :constants, :types, :exceptions, :cursors, :variables, :functions, :procedures
 

@@ -1,7 +1,7 @@
 
-# line 1 "lib/vorax/parser/grammars/package_spec.rl"
+# line 1 "lib/vorax/parser/grammars/declare.rl"
 
-# line 41 "lib/vorax/parser/grammars/package_spec.rl"
+# line 41 "lib/vorax/parser/grammars/declare.rl"
 
 
 require 'set'
@@ -11,7 +11,7 @@ module Vorax
   module Parser
 
     # A class used to parse a PLSQL package spec.
-    class PackageSpec
+    class Declare
 
       attr_reader :constants, :types, :exceptions, :cursors, :variables, :functions, :procedures
 
@@ -29,12 +29,12 @@ module Vorax
         if data
           eof = data.length
           
-# line 33 "lib/vorax/parser/grammars/package_spec.rb"
+# line 33 "lib/vorax/parser/grammars/declare.rb"
 class << self
-	attr_accessor :_package_spec_actions
-	private :_package_spec_actions, :_package_spec_actions=
+	attr_accessor :_declare_actions
+	private :_declare_actions, :_declare_actions=
 end
-self._package_spec_actions = [
+self._declare_actions = [
 	0, 1, 0, 1, 1, 1, 2, 1, 
 	3, 1, 4, 1, 15, 1, 16, 1, 
 	17, 1, 18, 1, 19, 1, 20, 1, 
@@ -51,10 +51,10 @@ self._package_spec_actions = [
 ]
 
 class << self
-	attr_accessor :_package_spec_key_offsets
-	private :_package_spec_key_offsets, :_package_spec_key_offsets=
+	attr_accessor :_declare_key_offsets
+	private :_declare_key_offsets, :_declare_key_offsets=
 end
-self._package_spec_key_offsets = [
+self._declare_key_offsets = [
 	0, 11, 12, 13, 14, 15, 17, 19, 
 	24, 47, 48, 53, 54, 55, 56, 57, 
 	59, 61, 63, 65, 67, 69, 71, 73, 
@@ -88,10 +88,10 @@ self._package_spec_key_offsets = [
 ]
 
 class << self
-	attr_accessor :_package_spec_trans_keys
-	private :_package_spec_trans_keys, :_package_spec_trans_keys=
+	attr_accessor :_declare_trans_keys
+	private :_declare_trans_keys, :_declare_trans_keys=
 end
-self._package_spec_trans_keys = [
+self._declare_trans_keys = [
 	32, 45, 47, 65, 68, 73, 97, 100, 
 	105, 9, 13, 45, 10, 42, 42, 42, 
 	47, 83, 115, 32, 45, 47, 9, 13, 
@@ -328,10 +328,10 @@ self._package_spec_trans_keys = [
 ]
 
 class << self
-	attr_accessor :_package_spec_single_lengths
-	private :_package_spec_single_lengths, :_package_spec_single_lengths=
+	attr_accessor :_declare_single_lengths
+	private :_declare_single_lengths, :_declare_single_lengths=
 end
-self._package_spec_single_lengths = [
+self._declare_single_lengths = [
 	9, 1, 1, 1, 1, 2, 2, 3, 
 	15, 1, 3, 1, 1, 1, 1, 2, 
 	2, 2, 2, 2, 2, 2, 2, 2, 
@@ -365,10 +365,10 @@ self._package_spec_single_lengths = [
 ]
 
 class << self
-	attr_accessor :_package_spec_range_lengths
-	private :_package_spec_range_lengths, :_package_spec_range_lengths=
+	attr_accessor :_declare_range_lengths
+	private :_declare_range_lengths, :_declare_range_lengths=
 end
-self._package_spec_range_lengths = [
+self._declare_range_lengths = [
 	1, 0, 0, 0, 0, 0, 0, 1, 
 	4, 0, 1, 0, 0, 0, 0, 0, 
 	0, 0, 0, 0, 0, 0, 0, 0, 
@@ -402,10 +402,10 @@ self._package_spec_range_lengths = [
 ]
 
 class << self
-	attr_accessor :_package_spec_index_offsets
-	private :_package_spec_index_offsets, :_package_spec_index_offsets=
+	attr_accessor :_declare_index_offsets
+	private :_declare_index_offsets, :_declare_index_offsets=
 end
-self._package_spec_index_offsets = [
+self._declare_index_offsets = [
 	0, 11, 13, 15, 17, 19, 22, 25, 
 	30, 50, 52, 57, 59, 61, 63, 65, 
 	68, 71, 74, 77, 80, 83, 86, 89, 
@@ -439,10 +439,10 @@ self._package_spec_index_offsets = [
 ]
 
 class << self
-	attr_accessor :_package_spec_indicies
-	private :_package_spec_indicies, :_package_spec_indicies=
+	attr_accessor :_declare_indicies
+	private :_declare_indicies, :_declare_indicies=
 end
-self._package_spec_indicies = [
+self._declare_indicies = [
 	1, 2, 3, 4, 5, 4, 4, 5, 
 	4, 1, 0, 6, 0, 1, 6, 7, 
 	0, 8, 7, 8, 1, 7, 9, 9, 
@@ -642,10 +642,10 @@ self._package_spec_indicies = [
 ]
 
 class << self
-	attr_accessor :_package_spec_trans_targs
-	private :_package_spec_trans_targs, :_package_spec_trans_targs=
+	attr_accessor :_declare_trans_targs
+	private :_declare_trans_targs, :_declare_trans_targs=
 end
-self._package_spec_trans_targs = [
+self._declare_trans_targs = [
 	183, 0, 1, 3, 6, 166, 2, 4, 
 	5, 7, 8, 38, 40, 9, 37, 43, 
 	84, 93, 108, 127, 9, 10, 185, 11, 
@@ -687,10 +687,10 @@ self._package_spec_trans_targs = [
 ]
 
 class << self
-	attr_accessor :_package_spec_trans_actions
-	private :_package_spec_trans_actions, :_package_spec_trans_actions=
+	attr_accessor :_declare_trans_actions
+	private :_declare_trans_actions, :_declare_trans_actions=
 end
-self._package_spec_trans_actions = [
+self._declare_trans_actions = [
 	35, 0, 0, 0, 0, 0, 0, 0, 
 	0, 0, 0, 0, 0, 1, 1, 1, 
 	1, 1, 1, 1, 0, 0, 95, 3, 
@@ -732,10 +732,10 @@ self._package_spec_trans_actions = [
 ]
 
 class << self
-	attr_accessor :_package_spec_to_state_actions
-	private :_package_spec_to_state_actions, :_package_spec_to_state_actions=
+	attr_accessor :_declare_to_state_actions
+	private :_declare_to_state_actions, :_declare_to_state_actions=
 end
-self._package_spec_to_state_actions = [
+self._declare_to_state_actions = [
 	0, 0, 0, 0, 0, 0, 0, 0, 
 	0, 0, 0, 0, 0, 0, 0, 0, 
 	0, 0, 0, 0, 0, 0, 0, 0, 
@@ -769,10 +769,10 @@ self._package_spec_to_state_actions = [
 ]
 
 class << self
-	attr_accessor :_package_spec_from_state_actions
-	private :_package_spec_from_state_actions, :_package_spec_from_state_actions=
+	attr_accessor :_declare_from_state_actions
+	private :_declare_from_state_actions, :_declare_from_state_actions=
 end
-self._package_spec_from_state_actions = [
+self._declare_from_state_actions = [
 	0, 0, 0, 0, 0, 0, 0, 0, 
 	0, 0, 0, 0, 0, 0, 0, 0, 
 	0, 0, 0, 0, 0, 0, 0, 0, 
@@ -806,10 +806,10 @@ self._package_spec_from_state_actions = [
 ]
 
 class << self
-	attr_accessor :_package_spec_eof_trans
-	private :_package_spec_eof_trans, :_package_spec_eof_trans=
+	attr_accessor :_declare_eof_trans
+	private :_declare_eof_trans, :_declare_eof_trans=
 end
-self._package_spec_eof_trans = [
+self._declare_eof_trans = [
 	1, 1, 1, 1, 1, 1, 1, 1, 
 	1, 1, 1, 1, 1, 1, 1, 1, 
 	1, 1, 1, 1, 1, 1, 1, 1, 
@@ -843,39 +843,39 @@ self._package_spec_eof_trans = [
 ]
 
 class << self
-	attr_accessor :package_spec_start
+	attr_accessor :declare_start
 end
-self.package_spec_start = 183;
+self.declare_start = 183;
 class << self
-	attr_accessor :package_spec_first_final
+	attr_accessor :declare_first_final
 end
-self.package_spec_first_final = 183;
+self.declare_first_final = 183;
 class << self
-	attr_accessor :package_spec_error
+	attr_accessor :declare_error
 end
-self.package_spec_error = -1;
+self.declare_error = -1;
 
 class << self
-	attr_accessor :package_spec_en_main
+	attr_accessor :declare_en_main
 end
-self.package_spec_en_main = 183;
+self.declare_en_main = 183;
 
 
-# line 68 "lib/vorax/parser/grammars/package_spec.rl"
+# line 68 "lib/vorax/parser/grammars/declare.rl"
           
-# line 867 "lib/vorax/parser/grammars/package_spec.rb"
+# line 867 "lib/vorax/parser/grammars/declare.rb"
 begin
 	p ||= 0
 	pe ||= data.length
-	cs = package_spec_start
+	cs = declare_start
 	ts = nil
 	te = nil
 	act = 0
 end
 
-# line 69 "lib/vorax/parser/grammars/package_spec.rl"
+# line 69 "lib/vorax/parser/grammars/declare.rl"
           
-# line 879 "lib/vorax/parser/grammars/package_spec.rb"
+# line 879 "lib/vorax/parser/grammars/declare.rb"
 begin
 	_klen, _trans, _keys, _acts, _nacts = nil
 	_goto_level = 0
@@ -893,27 +893,27 @@ begin
 	end
 	end
 	if _goto_level <= _resume
-	_acts = _package_spec_from_state_actions[cs]
-	_nacts = _package_spec_actions[_acts]
+	_acts = _declare_from_state_actions[cs]
+	_nacts = _declare_actions[_acts]
 	_acts += 1
 	while _nacts > 0
 		_nacts -= 1
 		_acts += 1
-		case _package_spec_actions[_acts - 1]
+		case _declare_actions[_acts - 1]
 			when 3 then
 # line 1 "NONE"
 		begin
 ts = p
 		end
-# line 909 "lib/vorax/parser/grammars/package_spec.rb"
+# line 909 "lib/vorax/parser/grammars/declare.rb"
 		end # from state action switch
 	end
 	if _trigger_goto
 		next
 	end
-	_keys = _package_spec_key_offsets[cs]
-	_trans = _package_spec_index_offsets[cs]
-	_klen = _package_spec_single_lengths[cs]
+	_keys = _declare_key_offsets[cs]
+	_trans = _declare_index_offsets[cs]
+	_klen = _declare_single_lengths[cs]
 	_break_match = false
 	
 	begin
@@ -925,9 +925,9 @@ ts = p
 	        break if _upper < _lower
 	        _mid = _lower + ( (_upper - _lower) >> 1 )
 
-	        if data[p].ord < _package_spec_trans_keys[_mid]
+	        if data[p].ord < _declare_trans_keys[_mid]
 	           _upper = _mid - 1
-	        elsif data[p].ord > _package_spec_trans_keys[_mid]
+	        elsif data[p].ord > _declare_trans_keys[_mid]
 	           _lower = _mid + 1
 	        else
 	           _trans += (_mid - _keys)
@@ -939,16 +939,16 @@ ts = p
 	     _keys += _klen
 	     _trans += _klen
 	  end
-	  _klen = _package_spec_range_lengths[cs]
+	  _klen = _declare_range_lengths[cs]
 	  if _klen > 0
 	     _lower = _keys
 	     _upper = _keys + (_klen << 1) - 2
 	     loop do
 	        break if _upper < _lower
 	        _mid = _lower + (((_upper-_lower) >> 1) & ~1)
-	        if data[p].ord < _package_spec_trans_keys[_mid]
+	        if data[p].ord < _declare_trans_keys[_mid]
 	          _upper = _mid - 2
-	        elsif data[p].ord > _package_spec_trans_keys[_mid+1]
+	        elsif data[p].ord > _declare_trans_keys[_mid+1]
 	          _lower = _mid + 2
 	        else
 	          _trans += ((_mid - _keys) >> 1)
@@ -960,26 +960,26 @@ ts = p
 	     _trans += _klen
 	  end
 	end while false
-	_trans = _package_spec_indicies[_trans]
+	_trans = _declare_indicies[_trans]
 	end
 	if _goto_level <= _eof_trans
-	cs = _package_spec_trans_targs[_trans]
-	if _package_spec_trans_actions[_trans] != 0
-		_acts = _package_spec_trans_actions[_trans]
-		_nacts = _package_spec_actions[_acts]
+	cs = _declare_trans_targs[_trans]
+	if _declare_trans_actions[_trans] != 0
+		_acts = _declare_trans_actions[_trans]
+		_nacts = _declare_actions[_acts]
 		_acts += 1
 		while _nacts > 0
 			_nacts -= 1
 			_acts += 1
-			case _package_spec_actions[_acts - 1]
+			case _declare_actions[_acts - 1]
 when 0 then
-# line 7 "lib/vorax/parser/grammars/package_spec.rl"
+# line 7 "lib/vorax/parser/grammars/declare.rl"
 		begin
 
   @start = p
 		end
 when 1 then
-# line 11 "lib/vorax/parser/grammars/package_spec.rl"
+# line 11 "lib/vorax/parser/grammars/declare.rl"
 		begin
 
   @end = p - 1
@@ -990,121 +990,121 @@ when 4 then
 te = p+1
 		end
 when 5 then
-# line 28 "lib/vorax/parser/grammars/package_spec.rl"
+# line 28 "lib/vorax/parser/grammars/declare.rl"
 		begin
 act = 1;		end
 when 6 then
-# line 30 "lib/vorax/parser/grammars/package_spec.rl"
+# line 30 "lib/vorax/parser/grammars/declare.rl"
 		begin
 act = 3;		end
 when 7 then
-# line 31 "lib/vorax/parser/grammars/package_spec.rl"
+# line 31 "lib/vorax/parser/grammars/declare.rl"
 		begin
 act = 4;		end
 when 8 then
-# line 32 "lib/vorax/parser/grammars/package_spec.rl"
+# line 32 "lib/vorax/parser/grammars/declare.rl"
 		begin
 act = 5;		end
 when 9 then
-# line 33 "lib/vorax/parser/grammars/package_spec.rl"
+# line 33 "lib/vorax/parser/grammars/declare.rl"
 		begin
 act = 6;		end
 when 10 then
-# line 34 "lib/vorax/parser/grammars/package_spec.rl"
+# line 34 "lib/vorax/parser/grammars/declare.rl"
 		begin
 act = 7;		end
 when 11 then
-# line 35 "lib/vorax/parser/grammars/package_spec.rl"
+# line 35 "lib/vorax/parser/grammars/declare.rl"
 		begin
 act = 8;		end
 when 12 then
-# line 36 "lib/vorax/parser/grammars/package_spec.rl"
+# line 36 "lib/vorax/parser/grammars/declare.rl"
 		begin
 act = 9;		end
 when 13 then
-# line 37 "lib/vorax/parser/grammars/package_spec.rl"
+# line 37 "lib/vorax/parser/grammars/declare.rl"
 		begin
 act = 10;		end
 when 14 then
-# line 38 "lib/vorax/parser/grammars/package_spec.rl"
+# line 38 "lib/vorax/parser/grammars/declare.rl"
 		begin
 act = 11;		end
 when 15 then
-# line 29 "lib/vorax/parser/grammars/package_spec.rl"
+# line 29 "lib/vorax/parser/grammars/declare.rl"
 		begin
 te = p+1
 		end
 when 16 then
-# line 31 "lib/vorax/parser/grammars/package_spec.rl"
+# line 31 "lib/vorax/parser/grammars/declare.rl"
 		begin
 te = p+1
  begin  @constants.add(data[(@start..@end)])  end
 		end
 when 17 then
-# line 32 "lib/vorax/parser/grammars/package_spec.rl"
+# line 32 "lib/vorax/parser/grammars/declare.rl"
 		begin
 te = p+1
  begin  @exceptions.add(data[(@start..@end)])  end
 		end
 when 18 then
-# line 38 "lib/vorax/parser/grammars/package_spec.rl"
+# line 38 "lib/vorax/parser/grammars/declare.rl"
 		begin
 te = p+1
 		end
 when 19 then
-# line 28 "lib/vorax/parser/grammars/package_spec.rl"
+# line 28 "lib/vorax/parser/grammars/declare.rl"
 		begin
 te = p
 p = p - 1;		end
 when 20 then
-# line 31 "lib/vorax/parser/grammars/package_spec.rl"
+# line 31 "lib/vorax/parser/grammars/declare.rl"
 		begin
 te = p
 p = p - 1; begin  @constants.add(data[(@start..@end)])  end
 		end
 when 21 then
-# line 32 "lib/vorax/parser/grammars/package_spec.rl"
+# line 32 "lib/vorax/parser/grammars/declare.rl"
 		begin
 te = p
 p = p - 1; begin  @exceptions.add(data[(@start..@end)])  end
 		end
 when 22 then
-# line 33 "lib/vorax/parser/grammars/package_spec.rl"
+# line 33 "lib/vorax/parser/grammars/declare.rl"
 		begin
 te = p
 p = p - 1; begin  @cursors.add(data[(@start..@end)])  end
 		end
 when 23 then
-# line 34 "lib/vorax/parser/grammars/package_spec.rl"
+# line 34 "lib/vorax/parser/grammars/declare.rl"
 		begin
 te = p
 p = p - 1; begin  @types.add(data[(@start..@end)])  end
 		end
 when 24 then
-# line 35 "lib/vorax/parser/grammars/package_spec.rl"
+# line 35 "lib/vorax/parser/grammars/declare.rl"
 		begin
 te = p
 p = p - 1; begin  @variables.add(data[(@start..@end)])  end
 		end
 when 25 then
-# line 36 "lib/vorax/parser/grammars/package_spec.rl"
+# line 36 "lib/vorax/parser/grammars/declare.rl"
 		begin
 te = p
 p = p - 1; begin  @functions.add(data[(@start..@end)])  end
 		end
 when 26 then
-# line 37 "lib/vorax/parser/grammars/package_spec.rl"
+# line 37 "lib/vorax/parser/grammars/declare.rl"
 		begin
 te = p
 p = p - 1; begin  @procedures.add(data[(@start..@end)])  end
 		end
 when 27 then
-# line 38 "lib/vorax/parser/grammars/package_spec.rl"
+# line 38 "lib/vorax/parser/grammars/declare.rl"
 		begin
 te = p
 p = p - 1;		end
 when 28 then
-# line 38 "lib/vorax/parser/grammars/package_spec.rl"
+# line 38 "lib/vorax/parser/grammars/declare.rl"
 		begin
  begin p = ((te))-1; end
 		end
@@ -1141,7 +1141,7 @@ end
 end
 end 
 			end
-# line 1145 "lib/vorax/parser/grammars/package_spec.rb"
+# line 1145 "lib/vorax/parser/grammars/declare.rb"
 			end # action switch
 		end
 	end
@@ -1150,18 +1150,18 @@ end
 	end
 	end
 	if _goto_level <= _again
-	_acts = _package_spec_to_state_actions[cs]
-	_nacts = _package_spec_actions[_acts]
+	_acts = _declare_to_state_actions[cs]
+	_nacts = _declare_actions[_acts]
 	_acts += 1
 	while _nacts > 0
 		_nacts -= 1
 		_acts += 1
-		case _package_spec_actions[_acts - 1]
+		case _declare_actions[_acts - 1]
 when 2 then
 # line 1 "NONE"
 		begin
 ts = nil;		end
-# line 1165 "lib/vorax/parser/grammars/package_spec.rb"
+# line 1165 "lib/vorax/parser/grammars/declare.rb"
 		end # to state action switch
 	end
 	if _trigger_goto
@@ -1175,8 +1175,8 @@ ts = nil;		end
 	end
 	if _goto_level <= _test_eof
 	if p == eof
-	if _package_spec_eof_trans[cs] > 0
-		_trans = _package_spec_eof_trans[cs] - 1;
+	if _declare_eof_trans[cs] > 0
+		_trans = _declare_eof_trans[cs] - 1;
 		_goto_level = _eof_trans
 		next;
 	end
@@ -1188,7 +1188,7 @@ end
 	end
 	end
 
-# line 70 "lib/vorax/parser/grammars/package_spec.rl"
+# line 70 "lib/vorax/parser/grammars/declare.rl"
         end
       end
 

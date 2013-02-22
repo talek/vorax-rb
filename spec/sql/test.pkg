@@ -29,7 +29,8 @@ create or replace package body test as
 
   begin
     l_var := 'abc';
-    for x in (select * from dual) loop
+    for x in (select * from v$session) loop
+      dbms_output.put_line(x.);
       if x.dummy = 'X' then
         dbms_output.put_line('Great!');
       end if;

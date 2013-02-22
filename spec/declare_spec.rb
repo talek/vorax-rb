@@ -7,7 +7,7 @@ describe 'package_spec' do
 
   it 'should work with a simple package' do
     text = File.open("spec/sql/muci.spc", 'rb') { |file| file.read }
-    parser = Vorax::Parser::PackageSpec.new
+    parser = Vorax::Parser::Declare.new
     parser.walk(text)
 
     parser.constants.should eq(Set.new(["MY_CONSTANT1", "MY_CONSTANT2"]))
@@ -21,7 +21,7 @@ describe 'package_spec' do
 
   it 'should work with a big package spec' do
     text = File.open('spec/sql/dbms_stats.spc', 'rb') { |file| file.read }
-    parser = Vorax::Parser::PackageSpec.new
+    parser = Vorax::Parser::Declare.new
     parser.walk(text)
     parser.constants.should eq(Set.new(["AUTO_CASCADE", "AUTO_INVALIDATE", "AUTO_SAMPLE_SIZE", "DEFAULT_DEGREE", "AUTO_DEGREE", "DEFAULT_CASCADE", "DEFAULT_DEGREE_VALUE", "DEFAULT_ESTIMATE_PERCENT", "DEFAULT_METHOD_OPT", "DEFAULT_NO_INVALIDATE", "DEFAULT_GRANULARITY", "DEFAULT_PUBLISH", "DEFAULT_INCREMENTAL", "DEFAULT_STALE_PERCENT", "DEFAULT_AUTOSTATS_TARGET", "DEFAULT_STAT_CATEGORY", "PURGE_ALL"]))
     parser.exceptions.should eq(Set.new([]))
@@ -34,7 +34,7 @@ describe 'package_spec' do
 
   it 'should work with a SYS package spec' do
     text = File.open('spec/sql/dbms_crypto.spc', 'rb') { |file| file.read }
-    parser = Vorax::Parser::PackageSpec.new
+    parser = Vorax::Parser::Declare.new
     parser.walk(text)
     parser.constants.should eq(Set.new(["HASH_MD4", "HASH_MD5", "HASH_SH1", "HMAC_MD5", "HMAC_SH1", "ENCRYPT_DES", "ENCRYPT_3DES_2KEY", "ENCRYPT_3DES", "ENCRYPT_AES", "ENCRYPT_PBE_MD5DES", "ENCRYPT_AES128", "ENCRYPT_AES192", "ENCRYPT_AES256", "CHAIN_CBC", "CHAIN_CFB", "CHAIN_ECB", "CHAIN_OFB", "PAD_PKCS5", "PAD_NONE", "PAD_ZERO", "PAD_ORCL", "ENCRYPT_RC4", "DES_CBC_PKCS5", "DES3_CBC_PKCS5", "AES_CBC_PKCS5"]))
     parser.exceptions.should eq(Set.new(["CipherSuiteInvalid", "CipherSuiteNull", "KeyNull", "KeyBadSize", "DoubleEncryption"]))
