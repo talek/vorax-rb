@@ -343,6 +343,10 @@ STRING
 		Parser.describe_for(text).should == {:cursor_var=>nil, :for_var=>"x", :expr=>"(select * from dual)", :end_pos=>32}
 		text = "for x in reverse 1..10 loops "
 		Parser.describe_for(text)[:end_pos].should == -1
+		text = "for x in p.cursor loop "
+		Parser.describe_for(text).should == {:cursor_var=>"p.cursor", :for_var=>"x", :expr=>nil, :end_pos=>22}
+		text = "for x in user.p.cursor loop "
+		Parser.describe_for(text).should == {:cursor_var=>"user.p.cursor", :for_var=>"x", :expr=>nil, :end_pos=>27}
 	end# }}}
 
 end

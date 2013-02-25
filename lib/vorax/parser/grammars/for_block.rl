@@ -17,8 +17,12 @@ action for_var {
 	@for_var = data[(@start..@end)]
 }
 
-action cursor_var {
-	@cursor_var = data[(@start..@end)]
+action start_capture_cursor {
+	@cursor_var_start = p
+}
+
+action end_capture_cursor {
+	@cursor_var = data[(@cursor_var_start..p-1)]
 }
 
 action start_identifier {
@@ -33,9 +37,14 @@ action end_identifier {
 expression = '(' >expr_start;
 id = identifier >start_identifier %end_identifier;
 
+plain_cursor_var = identifier - K_REVERSE;
+cursor_var_level2 = identifier '.' plain_cursor_var;
+cursor_var_level3 = identifier '.' cursor_var_level2;
+cursor_var = cursor_var_level3 | cursor_var_level2 | plain_cursor_var;
+
 for_stmt_range = ws+ (K_REVERSE ws+)? digit+ ws* '..' ws* digit+ ws+;
 for_stmt_query = ws* expression ws*;
-for_stmt_cursor = ws+ (id - K_REVERSE) %cursor_var ws+;
+for_stmt_cursor = ws+ cursor_var >start_capture_cursor %end_capture_cursor ws+;
 for_stmt := (K_FOR ws+ id %for_var ws+ K_IN (for_stmt_range | for_stmt_query | for_stmt_cursor) K_LOOP ws+) @mark_end;
 
 }%%
