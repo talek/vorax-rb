@@ -37,10 +37,7 @@ action end_identifier {
 expression = '(' >expr_start;
 id = identifier >start_identifier %end_identifier;
 
-plain_cursor_var = identifier - K_REVERSE;
-cursor_var_level2 = identifier '.' plain_cursor_var;
-cursor_var_level3 = identifier '.' cursor_var_level2;
-cursor_var = cursor_var_level3 | cursor_var_level2 | plain_cursor_var;
+cursor_var = qualified_identifier - K_REVERSE;
 
 for_stmt_range = ws+ (K_REVERSE ws+)? digit+ ws* '..' ws* digit+ ws+;
 for_stmt_query = ws* expression ws*;

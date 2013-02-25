@@ -16,6 +16,8 @@ create or replace package muci as
 
   g_var1 integer;
   g_var2 varchar2(100) := 'xyz';
+  g_var3 dual.dummy%type;
+  g_var4 all_objects%rowtype;
 
   procedure my_proc(p1 integer);
   function my_func(param1 varchar2, param2 boolean := true) return boolean;

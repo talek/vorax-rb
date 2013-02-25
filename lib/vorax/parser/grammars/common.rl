@@ -21,7 +21,13 @@ ws = space | comment;
 simple_identifier = [A-Za-z_$#][0-9A-Za-z_$#]*;
 identifier = simple_identifier | dquoted_string;
 
+identifier_level2 = identifier '.' identifier;
+identifier_level3 = identifier '.' identifier_level2;
+qualified_identifier = identifier_level3 | identifier_level2 | identifier;
+
 # define intereseting keywords
+K_ROWTYPE=/%rowtype/i;
+K_VARTYPE=/%type/i;
 K_END = /end/i;
 K_REVERSE = /reverse/i;
 K_FOR = /for/i;
