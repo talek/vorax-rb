@@ -5,6 +5,12 @@ include Parser
 
 describe 'package_spec' do
 
+	it 'should get the vim format' do
+    text = File.open("spec/sql/muci.spc", 'rb') { |file| file.read }
+    parser = Vorax::Parser::Declare.new(text)
+		parser.to_vim.should == %q[[ {'name' : "MY_CONSTANT1", 'is_a' : "constant", 'type' : "varchar2", 'captured_text' : "MY_CONSTANT1 constant varchar2(100) := 'abc';"},{'name' : "MY_CONSTANT2", 'is_a' : "constant", 'type' : "integer", 'captured_text' : "MY_CONSTANT2 constant integer := 10;"},{'name' : "ex_no_data_found", 'is_a' : "exception", 'type' : "exception", 'captured_text' : "ex_no_data_found exception;"},{'name' : "ex_custom", 'is_a' : "exception", 'type' : "exception", 'captured_text' : "ex_custom exception;"},{'name' : "my_cursor", 'is_a' : "cursor", 'type' : "", 'captured_text' : "cursor my_cursor is\n    select * from user_tables;"},{'name' : "population_type", 'is_a' : "type", 'type' : "table", 'captured_text' : "type population_type is table of varchar2(100);"},{'name' : "g_var1", 'is_a' : "variable", 'type' : "integer", 'captured_text' : "g_var1 integer;"},{'name' : "g_var2", 'is_a' : "variable", 'type' : "varchar2", 'captured_text' : "g_var2 varchar2(100) := 'xyz';"},{'name' : "g_var3", 'is_a' : "variable", 'type' : "dual.dummy%type", 'captured_text' : "g_var3 dual.dummy%type;"},{'name' : "g_var4", 'is_a' : "variable", 'type' : "all_objects%rowtype", 'captured_text' : "g_var4 all_objects%rowtype;"},{'name' : "my_proc", 'is_a' : "procedure", 'type' : "", 'captured_text' : "procedure my_proc(p1 integer);"},{'name' : "my_func", 'is_a' : "function", 'type' : "", 'captured_text' : "function my_func(param1 varchar2, param2 boolean := true) return boolean;"} ]]
+	end
+
   it 'should work with a simple package' do
     text = File.open("spec/sql/muci.spc", 'rb') { |file| file.read }
     parser = Vorax::Parser::Declare.new(text)

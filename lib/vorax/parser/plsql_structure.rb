@@ -58,7 +58,7 @@ module Vorax
 				#@root.each { |t| t.content.end_pos = @text.length if t.content && t.content.end_pos == 0 }
         @root
       end
-      
+
     private
 
       def assign_parent(node)
