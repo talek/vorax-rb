@@ -26,6 +26,7 @@ identifier_level3 = identifier '.' identifier_level2;
 qualified_identifier = identifier_level3 | identifier_level2 | identifier;
 
 # define intereseting keywords
+K_RECORD=/%record*/i;
 K_ROWTYPE=/%rowtype/i;
 K_VARTYPE=/%type/i;
 K_END = /end/i;

@@ -5,6 +5,20 @@ include Parser
 
 describe 'package_spec' do
 
+	it 'should parse a simple declare section' do
+		text = <<STRING
+		as
+		  type Employees is record (
+		    first_name varchar2(100),
+		    last_name varchar2(100)
+		  );
+			emp Employees;
+STRING
+    parser = Vorax::Parser::Declare.new(text)
+		parser.items.include?(DeclareItem.new("Employees", :type, "record", "type Employees is record (\n\t\t    first_name varchar2(100),\n\t\t    last_name varchar2(100)\n\t\t  );")).should be_true
+		parser.items.include?(DeclareItem.new("emp", :variable, "Employees", "emp Employees;")).should be_true
+	end
+
 	it 'should get the vim format' do
     text = File.open("spec/sql/muci.spc", 'rb') { |file| file.read }
     parser = Vorax::Parser::Declare.new(text)
