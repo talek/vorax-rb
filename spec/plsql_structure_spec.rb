@@ -19,7 +19,7 @@ describe 'plsql structure' do
 			@result << (node.has_children? ? "+" : ">")
 		end
 
-		@result << " #{node.name} - #{(node.content ? node.content.end_pos : '')} -> begin=#{(node.content ? node.content.body_start_pos : '')}\n"
+		@result << " #{node.content}\n"
 
 		node.children { |child| compute_tree(child, level + 1)}
 	end# }}}
@@ -28,40 +28,36 @@ describe 'plsql structure' do
     text = File.open('spec/sql/test.pkg', 'rb') { |file| file.read }
     structure = Parser::PlsqlStructure.new(text)
     compute_tree(structure.tree)
-    @result.should eq(<<STR
-* root -  -> begin=
-|---+ test[SPEC]: 25 - 154 -> begin=0
-|    |---> test[PROCEDURE]: 61 - 61 -> begin=0
-|    +---> muci[FUNCTION]: 91 - 91 -> begin=0
-+---+ test[BODY]: 180 - 1672 -> begin=1635
-    |---+ private_proc[PROCEDURE]: 232 - 1373 -> begin=454
-|        |---> abc[FUNCTION]: 325 - 392 -> begin=360
-|        |---> xyz[PROCEDURE]: 403 - 449 -> begin=424
-|        |---+ for[FOR_BLOCK]: 485 - 1042 -> begin=530
-|            |---> if[IF_BLOCK]: 563 - 636 -> begin=564
-|            +---+ if[IF_BLOCK]: 645 - 1016 -> begin=646
-                |---+ if[IF_BLOCK]: 667 - 924 -> begin=668
-|                    +---> for[FOR_BLOCK]: 691 - 858 -> begin=736
-                +---> if[IF_BLOCK]: 935 - 1002 -> begin=936
-|        |---> if[IF_BLOCK]: 1088 - 1167 -> begin=1089
-|        +---> loop[LOOP_BLOCK]: 1223 - 1318 -> begin=1224
-    |---+ test[PROCEDURE]: 1378 - 1544 -> begin=1410
-|        +---> anonymous[BLOCK]: 1466 - 1537 -> begin=1461
-    +---> muci[FUNCTION]: 1549 - 1632 -> begin=1603
-STR
-)
+    @result.should == <<STRING
+* 
+|---> SpecRegion: name=test start_pos=25 end_pos=154
++---+ BodyRegion: name=test start_pos=180 end_pos=1666
+    |---+ SubprogRegion: name=private_proc start_pos=232 end_pos=1367 body_start_pos=454 metadata=SubprogItem name=private_proc kind=procedure args=[ArgumentItem: name=p direction=in has_default=false data_type=integer] return_type=, end_def=33 declare_items=[VariableItem: name=l_var type="varchar2", FunctionItem name=abc kind=function args=[] return_type=boolean, end_def=27, ProcedureItem name=xyz kind=procedure args=[] return_type=, end_def=13]
+|        |---> SubprogRegion: name=abc start_pos=325 end_pos=392 body_start_pos=360 metadata=SubprogItem name=abc kind=function args=[] return_type=boolean, end_def=27 declare_items=[]
+|        |---> SubprogRegion: name=xyz start_pos=403 end_pos=449 body_start_pos=424 metadata=SubprogItem name=xyz kind=procedure args=[] return_type=, end_def=13 declare_items=[]
+|        |---+ ForRegion: name= start_pos=485 end_pos=1036 variable=x domain=(select * from v$session) domain_type=expr
+|            |---> IfRegion: name= start_pos=563 end_pos=630
+|            +---+ IfRegion: name= start_pos=639 end_pos=1010
+                |---+ IfRegion: name= start_pos=661 end_pos=918
+|                    +---> ForRegion: name= start_pos=685 end_pos=852 variable=y domain=(select * from cat) domain_type=expr
+                +---> IfRegion: name= start_pos=929 end_pos=996
+|        |---> IfRegion: name= start_pos=1082 end_pos=1161
+|        +---> LoopRegion: name= start_pos=1217 end_pos=1312
+    |---+ SubprogRegion: name=test start_pos=1372 end_pos=1538 body_start_pos=1404 metadata=SubprogItem name=test kind=procedure args=[ArgumentItem: name=p1 direction=in has_default=false data_type=integer] return_type=, end_def=26 declare_items=[]
+|        +---> AnonymousRegion: name= start_pos=1460 end_pos=1531
+    +---> SubprogRegion: name=muci start_pos=1543 end_pos=1626 body_start_pos=1597 metadata=SubprogItem name=muci kind=function args=[ArgumentItem: name=x direction=in has_default=false data_type=varchar2, ArgumentItem: name=y direction=in has_default=false data_type=clob] return_type=boolean, end_def=48 declare_items=[]
+STRING
   end# }}}
 
   it 'should work for a function' do# {{{
     text = File.open('spec/sql/test.fnc', 'rb') { |file| file.read }
     structure = Parser::PlsqlStructure.new(text)
     compute_tree(structure.tree)
-    @result.should eq(<<STR
-* root -  -> begin=
-+---+ test[FUNCTION]: 18 - 134 -> begin=118
-    +---> muci[PROCEDURE]: 78 - 115 -> begin=97
-STR
-)
+    @result.should ==<<STRING
+* 
++---+ SubprogRegion: name=test start_pos=18 end_pos=134 body_start_pos=118 metadata=SubprogItem name=test kind=function args=[] return_type=boolean, end_def=28 declare_items=[VariableItem: name=l_local type="varchar2", ProcedureItem name=muci kind=procedure args=[] return_type=, end_def=14]
+    +---> SubprogRegion: name=muci start_pos=78 end_pos=115 body_start_pos=97 metadata=SubprogItem name=muci kind=procedure args=[] return_type=, end_def=14 declare_items=[]
+STRING
   end# }}}
 
 end

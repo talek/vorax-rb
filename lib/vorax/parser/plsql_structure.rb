@@ -6,32 +6,13 @@ module Vorax
 
   module Parser
 
-    class Region
-
-      attr_accessor :start_pos, :end_pos, :body_start_pos, :context
-      attr_reader :name, :type
-
-      def initialize(name, type, start_pos = 0, end_pos = 0)
-        @name = name
-        @type = type
-        @start_pos = start_pos
-        @end_pos = end_pos
-      	@body_start_pos = 0
-      	@context = nil
-      end
-
-      def to_s
-        "#{@name}[#{@type}]: #{@start_pos}"
-      end
-
-    end
 
     class PlsqlStructure
 
       PLSQL_SPEC = /(?:\bpackage\b|\btype\b)/i unless defined?(PLSQL_SPEC)
       SUBPROG = /(?:\bfunction\b|\bprocedure\b)/i unless defined?(SUBPROG)
-      BEGIN_MODULE = /(?:\bbegin\b)/i unless defined?(BEGIN_MODULE)
-      END_MODULE = /(?:\bend\b)/i unless defined?(END_MODULE)
+      BEGIN_MARKER = /(?:\bbegin\b)/i unless defined?(BEGIN_MARKER)
+      END_MARKER = /(?:\bend\b)/i unless defined?(END_MARKER)
       FOR_STMT = /(?:\bfor\b)/i unless defined?(FOR_STMT)
       LOOP_STMT = /(?:\bloop\b)/i unless defined?(LOOP_STMT)
       IF_STMT = /(?:\bif\b)/i unless defined?(IF_STMT)
@@ -51,19 +32,16 @@ module Vorax
         # be prepare for any nasting parse error.
         # Failing here is kind of usual, having in mind
         # that we often parse incomplete code.
+        puts e.message
+        puts e.backtrace
         Vorax.debug(e.to_s)
       end
 
       def tree
-				#@root.each { |t| t.content.end_pos = @text.length if t.content && t.content.end_pos == 0 }
         @root
       end
 
     private
-
-      def assign_parent(node)
-        @current_parent = node
-      end
 
       def register_spots
         register_plsql_spec_spot()
@@ -80,12 +58,13 @@ module Vorax
         @walker.register_spot(PLSQL_SPEC) do |scanner|
           if @level == 0
             meta_data = Parser.plsql_def("#{scanner.matched}#{scanner.rest}")
-            if meta_data[:type] == 'SPEC' || meta_data[:type] == 'BODY'
-              # is it a spec or a body?
-              region = Region.new(meta_data[:name], meta_data[:type], scanner.pos)
-              assign_parent(@current_parent << Tree::TreeNode.new(region.to_s, region))
-              @level += 1
-            end
+            if meta_data[:type] == 'SPEC'
+              region = SpecRegion.new(self, :name => meta_data[:name], :start_pos => scanner.pos)
+						elsif meta_data[:type] == 'BODY'
+              region = BodyRegion.new(self, :name => meta_data[:name], :start_pos => scanner.pos)
+						end
+						assign_parent(@current_parent << Tree::TreeNode.new(region.id, region))
+						@level += 1
           end
         end
       end
@@ -105,36 +84,30 @@ module Vorax
 
       def register_subprog_spot
         @walker.register_spot(SUBPROG) do |scanner|
-        subprog_name = scanner.peek(32)[/(?:"[^"]+")|(?:[A-Z0-9$_#]+)/i]
-          if scanner.matched =~ /function/i
-            subprog_type = 'FUNCTION'
-          elsif scanner.matched =~ /procedure/i
-            subprog_type = 'PROCEDURE'
-          end
-          start_pos = scanner.pos - scanner.matched.length
-          region = Region.new(subprog_name, subprog_type, start_pos)
-          node = Tree::TreeNode.new(region.to_s, region)
-          @current_parent << node
-          if @current_parent && @current_parent.content && @current_parent.content.type == 'SPEC'
-						node.content.end_pos = node.content.start_pos
-          else
+          if not on_spec?
+						subprog_name = scanner.peek(32)[/(?:"[^"]+")|(?:[A-Z0-9$_#]+)/i]
+						start_pos = scanner.pos - scanner.matched.length
+						region = SubprogRegion.new(self, :name => subprog_name, :start_pos => start_pos)
+						node = Tree::TreeNode.new(region.id, region)
+						@current_parent << node
 						@level += 1
 						assign_parent(node)
-          end
+					end
         end
       end
 
       def register_begin_spot
-        @walker.register_spot(BEGIN_MODULE) do |scanner|
+        @walker.register_spot(BEGIN_MARKER) do |scanner|
           @begin_level += 1
           if @begin_level > 1
             # start a new region
-            region = Region.new('anonymous', 'BLOCK', scanner.pos)
-            region.body_start_pos = scanner.pos - scanner.matched.length
+            region = AnonymousRegion.new(self, :start_pos => scanner.pos)
             @level += 1
-            assign_parent(@current_parent << Tree::TreeNode.new(region.to_s, region))
+            assign_parent(@current_parent << Tree::TreeNode.new(region.id, region))
           else
-          	if @current_parent && @current_parent.content
+          	if @current_parent && 
+          		  @current_parent.content && 
+          		  @current_parent.content.kind_of?(SubprogRegion)
 							@current_parent.content.body_start_pos = scanner.pos - scanner.matched.length
 						end
           end
@@ -146,11 +119,22 @@ module Vorax
 					stmt = "#{scanner.matched}#{scanner.rest}"
 					handler = Parser.describe_for(stmt)
 					if handler[:end_pos] > 0
-						region = Region.new('for', 'FOR_BLOCK', scanner.pos - scanner.matched.length + 1)
-						region.body_start_pos = region.start_pos + handler[:end_pos]
-            region.context = handler
-            assign_parent(@current_parent << Tree::TreeNode.new(region.to_s, region))
-						scanner.pos = region.body_start_pos
+						start_pos = scanner.pos - scanner.matched.length + 1
+						domain = handler[:expr] || handler[:cursor_var]
+						if handler[:expr]
+							domain_type = :expr
+						elsif handler[:cursor_var]
+							domain_type = :cursor
+						else
+							domain_type = :counter
+						end
+						region = ForRegion.new(self, 
+																	 :start_pos => start_pos,
+																	 :variable => handler[:for_var],
+																	 :domain => domain,
+																	 :domain_type => domain_type)
+            assign_parent(@current_parent << Tree::TreeNode.new(region.id, region))
+						scanner.pos = start_pos + handler[:end_pos]
 						@level += 1
 					end
 				end
@@ -159,9 +143,8 @@ module Vorax
 			def register_loop_spot
         @walker.register_spot(LOOP_STMT) do |scanner|
 					stmt = "#{scanner.matched}#{scanner.rest}"
-					region = Region.new('loop', 'LOOP_BLOCK', scanner.pos - scanner.matched.length + 1)
-					region.body_start_pos = region.start_pos + 1
-					assign_parent(@current_parent << Tree::TreeNode.new(region.to_s, region))
+					region = LoopRegion.new(self, :start_pos => scanner.pos - scanner.matched.length + 1)
+					assign_parent(@current_parent << Tree::TreeNode.new(region.id, region))
 					@level += 1
 				end
 			end
@@ -169,15 +152,14 @@ module Vorax
 			def register_if_spot
         @walker.register_spot(IF_STMT) do |scanner|
 					stmt = "#{scanner.matched}#{scanner.rest}"
-					region = Region.new('if', 'IF_BLOCK', scanner.pos - scanner.matched.length + 1)
-					region.body_start_pos = region.start_pos + 1
-					assign_parent(@current_parent << Tree::TreeNode.new(region.to_s, region))
+					region = IfRegion.new(self, :start_pos => scanner.pos - scanner.matched.length + 1)
+					assign_parent(@current_parent << Tree::TreeNode.new(region.id, region))
 					@level += 1
 				end
 			end
 
       def register_end_spot
-        @walker.register_spot(END_MODULE) do |scanner|
+        @walker.register_spot(END_MARKER) do |scanner|
           # we have an "end" match. first of all check if it's not part
           # of an conditional compiling "$end" definition
           char_behind = scanner.string[scanner.pos - scanner.matched.length - 1, 1]
@@ -192,7 +174,7 @@ module Vorax
 								end
 								assign_parent(@current_parent.parent)
 							elsif metadata[:type] == 'END_LOOP'
-								if @current_parent.content && (@current_parent.content.type == 'FOR_BLOCK' || @current_parent.content.type == "LOOP_BLOCK")
+								if on_loop? || on_for?
 									@current_parent.content.end_pos = (scanner.pos - 1) + (metadata[:end_def] - 1)
 									scanner.pos = @current_parent.content.end_pos
 									assign_parent(@current_parent.parent)
@@ -201,7 +183,7 @@ module Vorax
 									scanner.terminate
 								end
 							elsif metadata[:type] == 'END_IF'
-								if @current_parent.content && @current_parent.content.type == 'IF_BLOCK'
+								if on_if?
 									@current_parent.content.end_pos = (scanner.pos - 1) + (metadata[:end_def] - 1)
 									scanner.pos = @current_parent.content.end_pos
 									assign_parent(@current_parent.parent)
@@ -213,6 +195,40 @@ module Vorax
 						end
           end
         end
+      end
+
+		  def current_region
+				if @current_parent && @current_parent.content
+					@current_parent.content
+				end
+			end
+
+			def on_spec?
+				current_region && current_region.kind_of?(SpecRegion)
+			end
+
+			def on_subprog?
+				current_region && current_region.kind_of?(SubprogRegion)
+			end
+
+			def on_for?
+				current_region && current_region.kind_of?(ForRegion)
+			end
+
+			def on_loop?
+				current_region && current_region.kind_of?(LoopRegion)
+			end
+
+			def on_if?
+				current_region && current_region.kind_of?(IfRegion)
+			end
+
+			def on_anonymous?
+				current_region && current_region.kind_of?(AnonymousRegion)
+			end
+
+      def assign_parent(node)
+        @current_parent = node
       end
 
     end

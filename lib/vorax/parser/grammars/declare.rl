@@ -67,13 +67,13 @@ main := |*
   squoted_string;
   dquoted_string;
   comment;
-  constant => { add_item(:constant, te) };
-  exception => { add_item(:exception, te) };
-  cursor => { add_item(:cursor, te) };
-  type => { add_item(:type, te) };
-  var => { add_item(:variable, te) };
-  function => { add_item(:function, te) };
-  procedure => { add_item(:procedure, te) };
+  constant => { add_item(ConstantItem.new(name, type)) };
+  exception => { add_item(ExceptionItem.new(name)) };
+  cursor => { add_item(CursorItem.new(name, capture(te))) };
+  type => { add_item(TypeItem.new(name, type, capture(te))) };
+  var => { add_item(VariableItem.new(name, type)) };
+  function => { add_item(FunctionItem.new(capture(te))) };
+  procedure => { add_item(ProcedureItem.new(capture(te))) };
   any => {};
 *|;
 
@@ -85,36 +85,7 @@ module Vorax
 
   module Parser
 
-		class DeclareItem
-
-			attr_reader :name
-			attr_accessor :is_a, :captured_text, :type
-
-			def initialize(name, is_a = nil, type = nil, captured_text = '')
-			  @name = name
-			  @is_a = is_a
-			  @type = type
-			  @captured_text = captured_text
-			end
-
-      def ==(obj)
-        self.name == obj.name && self.is_a == obj.is_a && self.type == obj.type && self.captured_text == obj.captured_text
-      end
-
-      def debug_constructor
-        "DeclareItem.new(#{@name.inspect}, #{@is_a.inspect}, #{@type.inspect}, #{@captured_text.inspect})"
-      end
-
-			def to_vim
-			  "{'name' : #{@name.to_s.inspect}," +
-			  " 'is_a' : #{@is_a.to_s.inspect}," +
-			  " 'type' : #{@type.to_s.inspect}," +
-			  " 'captured_text' : #{@captured_text.to_s.inspect}}"
-			end
-
-		end
-
-    # A class used to parse a PLSQL package spec.
+    # A class used to parse a declare section
     class Declare
 
       attr_reader :items
@@ -137,17 +108,21 @@ module Vorax
         end
       end
 
-			def to_vim
-			  "[ #{@items.map { |i| i.to_vim }.join(',')} ]"
-			end
-
       private
 
-			def add_item(type, te)
-				item = DeclareItem.new(@code[(@start..@end)])
-				item.is_a = type
-				item.type = @code[(@start_qi..@end_qi)] if @start_qi && @end_qi
-				item.captured_text = @code[(@start_capture..te)]
+			def capture(te)
+				@code[@start_capture..te]
+			end
+
+			def name
+			  @code[@start..@end]
+			end
+
+			def type
+			  @code[(@start_qi..@end_qi)] if @start_qi && @end_qi
+			end
+
+			def add_item(item)
 				@items << item
 				@start_qi = @end_qi = nil
 			end

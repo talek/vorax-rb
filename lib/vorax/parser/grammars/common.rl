@@ -26,13 +26,17 @@ identifier_level3 = identifier '.' identifier_level2;
 qualified_identifier = identifier_level3 | identifier_level2 | identifier;
 
 # define intereseting keywords
-K_RECORD=/%record*/i;
+K_DEFAULT=/default/i;
+K_RECORD=/record/i;
 K_ROWTYPE=/%rowtype/i;
 K_VARTYPE=/%type/i;
 K_END = /end/i;
 K_REVERSE = /reverse/i;
+K_RETURN = /return/i;
 K_FOR = /for/i;
 K_IN = /in/i;
+K_OUT = /out/i;
+K_NOCOPY = /nocopy/i;
 K_IF = /if/i;
 K_LOOP = /loop/i;
 K_PRAGMA = /pragma/i;

@@ -31,7 +31,7 @@ create or replace package body test as
     l_var := 'abc';
     for x in (select * from v$session) loop
       dbms_output.put_line(x.);
-      if x.dummy = 'X' then
+      if x = 'X' then
         dbms_output.put_line('Great!');
       end if;
       if 1 = 0 then

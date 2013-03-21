@@ -1,7 +1,7 @@
 
 # line 1 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rl"
 
-# line 28 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rl"
+# line 34 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rl"
 
 
 module Vorax
@@ -20,12 +20,12 @@ class << self
 end
 self._record_typ_actions = [
 	0, 1, 1, 1, 2, 1, 3, 1, 
-	5, 1, 6, 1, 7, 1, 12, 1, 
-	14, 1, 15, 1, 17, 1, 18, 1, 
-	19, 2, 0, 13, 2, 2, 3, 2, 
-	4, 16, 2, 7, 8, 2, 7, 9, 
-	2, 7, 10, 2, 7, 11, 4, 7, 
-	2, 3, 10
+	4, 1, 5, 1, 6, 1, 11, 1, 
+	12, 1, 14, 1, 15, 1, 16, 1, 
+	17, 1, 18, 1, 19, 2, 0, 13, 
+	2, 2, 3, 2, 6, 7, 2, 6, 
+	8, 2, 6, 9, 2, 6, 10, 4, 
+	6, 2, 3, 9
 ]
 
 class << self
@@ -33,14 +33,18 @@ class << self
 	private :_record_typ_key_offsets, :_record_typ_key_offsets=
 end
 self._record_typ_key_offsets = [
-	0, 7, 8, 9, 10, 11, 13, 15, 
-	20, 26, 28, 30, 32, 34, 36, 44, 
-	50, 63, 64, 77, 90, 91, 92, 93, 
-	94, 95, 97, 112, 113, 114, 115, 116, 
-	118, 119, 120, 121, 122, 124, 125, 126, 
-	127, 128, 130, 131, 132, 145, 146, 147, 
-	148, 149, 151, 152, 153, 155, 164, 171, 
-	171, 180, 195, 196, 197, 198, 211, 212
+	0, 9, 10, 11, 12, 13, 15, 17, 
+	19, 21, 23, 25, 27, 32, 46, 47, 
+	54, 60, 61, 62, 63, 64, 66, 74, 
+	75, 82, 90, 91, 106, 122, 138, 139, 
+	140, 141, 142, 144, 146, 151, 158, 159, 
+	160, 161, 162, 164, 166, 168, 170, 172, 
+	174, 180, 193, 194, 207, 220, 221, 222, 
+	223, 224, 225, 227, 242, 243, 244, 245, 
+	246, 248, 249, 250, 251, 252, 254, 255, 
+	256, 269, 270, 271, 272, 273, 275, 276, 
+	277, 279, 288, 297, 306, 321, 322, 323, 
+	324, 337, 338, 339
 ]
 
 class << self
@@ -48,33 +52,49 @@ class << self
 	private :_record_typ_trans_keys, :_record_typ_trans_keys=
 end
 self._record_typ_trans_keys = [
-	32, 45, 47, 73, 105, 9, 13, 45, 
-	10, 42, 42, 42, 47, 83, 115, 32, 
-	45, 47, 9, 13, 32, 37, 45, 47, 
-	9, 13, 82, 114, 69, 101, 67, 99, 
-	79, 111, 82, 114, 32, 40, 45, 47, 
-	68, 100, 9, 13, 32, 40, 45, 47, 
-	9, 13, 32, 34, 45, 47, 95, 9, 
-	13, 35, 36, 65, 90, 97, 122, 34, 
-	32, 34, 45, 47, 95, 9, 13, 35, 
-	36, 65, 90, 97, 122, 32, 34, 45, 
-	47, 95, 9, 13, 35, 36, 65, 90, 
-	97, 122, 34, 45, 10, 42, 42, 42, 
-	47, 32, 34, 45, 47, 95, 9, 13, 
-	35, 36, 48, 57, 65, 90, 97, 122, 
-	45, 10, 42, 42, 42, 47, 45, 10, 
-	42, 42, 42, 47, 45, 10, 42, 42, 
-	42, 47, 34, 39, 32, 34, 45, 47, 
+	32, 45, 47, 68, 73, 100, 105, 9, 
+	13, 45, 10, 42, 42, 42, 47, 69, 
+	101, 70, 102, 65, 97, 85, 117, 76, 
+	108, 84, 116, 32, 45, 47, 9, 13, 
+	32, 34, 40, 45, 47, 95, 9, 13, 
+	35, 36, 65, 90, 97, 122, 34, 32, 
+	40, 45, 46, 47, 9, 13, 32, 40, 
+	45, 47, 9, 13, 45, 10, 42, 42, 
+	42, 47, 34, 95, 35, 36, 65, 90, 
+	97, 122, 34, 32, 40, 45, 46, 47, 
+	9, 13, 34, 95, 35, 36, 65, 90, 
+	97, 122, 34, 32, 40, 45, 47, 95, 
+	9, 13, 35, 36, 48, 57, 65, 90, 
+	97, 122, 32, 40, 45, 46, 47, 95, 
+	9, 13, 35, 36, 48, 57, 65, 90, 
+	97, 122, 32, 40, 45, 46, 47, 95, 
+	9, 13, 35, 36, 48, 57, 65, 90, 
+	97, 122, 45, 10, 42, 42, 42, 47, 
+	83, 115, 32, 45, 47, 9, 13, 32, 
+	45, 47, 82, 114, 9, 13, 45, 10, 
+	42, 42, 42, 47, 69, 101, 67, 99, 
+	79, 111, 82, 114, 68, 100, 32, 40, 
+	45, 47, 9, 13, 32, 34, 45, 47, 
 	95, 9, 13, 35, 36, 65, 90, 97, 
-	122, 45, 10, 42, 42, 42, 47, 10, 
-	42, 42, 47, 32, 34, 39, 40, 44, 
-	45, 47, 9, 13, 32, 45, 47, 73, 
-	105, 9, 13, 95, 35, 36, 48, 57, 
-	65, 90, 97, 122, 32, 34, 45, 47, 
-	95, 9, 13, 35, 36, 48, 57, 65, 
-	90, 97, 122, 34, 39, 39, 32, 34, 
-	45, 47, 95, 9, 13, 35, 36, 65, 
-	90, 97, 122, 45, 42, 0
+	122, 34, 32, 34, 45, 47, 95, 9, 
+	13, 35, 36, 65, 90, 97, 122, 32, 
+	34, 45, 47, 95, 9, 13, 35, 36, 
+	65, 90, 97, 122, 34, 45, 10, 42, 
+	42, 42, 47, 32, 34, 45, 47, 95, 
+	9, 13, 35, 36, 48, 57, 65, 90, 
+	97, 122, 45, 10, 42, 42, 42, 47, 
+	45, 10, 42, 42, 42, 47, 34, 39, 
+	32, 34, 45, 47, 95, 9, 13, 35, 
+	36, 65, 90, 97, 122, 45, 10, 42, 
+	42, 42, 47, 10, 42, 42, 47, 32, 
+	34, 39, 44, 45, 47, 58, 9, 13, 
+	32, 45, 47, 68, 73, 100, 105, 9, 
+	13, 95, 35, 36, 48, 57, 65, 90, 
+	97, 122, 32, 34, 45, 47, 95, 9, 
+	13, 35, 36, 48, 57, 65, 90, 97, 
+	122, 34, 39, 39, 32, 34, 45, 47, 
+	95, 9, 13, 35, 36, 65, 90, 97, 
+	122, 45, 42, 61, 0
 ]
 
 class << self
@@ -82,14 +102,18 @@ class << self
 	private :_record_typ_single_lengths, :_record_typ_single_lengths=
 end
 self._record_typ_single_lengths = [
-	5, 1, 1, 1, 1, 2, 2, 3, 
-	4, 2, 2, 2, 2, 2, 6, 4, 
-	5, 1, 5, 5, 1, 1, 1, 1, 
-	1, 2, 5, 1, 1, 1, 1, 2, 
-	1, 1, 1, 1, 2, 1, 1, 1, 
-	1, 2, 1, 1, 5, 1, 1, 1, 
-	1, 2, 1, 1, 2, 7, 5, 0, 
-	1, 5, 1, 1, 1, 5, 1, 1
+	7, 1, 1, 1, 1, 2, 2, 2, 
+	2, 2, 2, 2, 3, 6, 1, 5, 
+	4, 1, 1, 1, 1, 2, 2, 1, 
+	5, 2, 1, 5, 6, 6, 1, 1, 
+	1, 1, 2, 2, 3, 5, 1, 1, 
+	1, 1, 2, 2, 2, 2, 2, 2, 
+	4, 5, 1, 5, 5, 1, 1, 1, 
+	1, 1, 2, 5, 1, 1, 1, 1, 
+	2, 1, 1, 1, 1, 2, 1, 1, 
+	5, 1, 1, 1, 1, 2, 1, 1, 
+	2, 7, 7, 1, 5, 1, 1, 1, 
+	5, 1, 1, 1
 ]
 
 class << self
@@ -97,14 +121,18 @@ class << self
 	private :_record_typ_range_lengths, :_record_typ_range_lengths=
 end
 self._record_typ_range_lengths = [
-	1, 0, 0, 0, 0, 0, 0, 1, 
-	1, 0, 0, 0, 0, 0, 1, 1, 
-	4, 0, 4, 4, 0, 0, 0, 0, 
-	0, 0, 5, 0, 0, 0, 0, 0, 
+	1, 0, 0, 0, 0, 0, 0, 0, 
+	0, 0, 0, 0, 1, 4, 0, 1, 
+	1, 0, 0, 0, 0, 0, 3, 0, 
+	1, 3, 0, 5, 5, 5, 0, 0, 
+	0, 0, 0, 0, 1, 1, 0, 0, 
 	0, 0, 0, 0, 0, 0, 0, 0, 
-	0, 0, 0, 0, 4, 0, 0, 0, 
-	0, 0, 0, 0, 0, 1, 1, 0, 
-	4, 5, 0, 0, 0, 4, 0, 0
+	1, 4, 0, 4, 4, 0, 0, 0, 
+	0, 0, 0, 5, 0, 0, 0, 0, 
+	0, 0, 0, 0, 0, 0, 0, 0, 
+	4, 0, 0, 0, 0, 0, 0, 0, 
+	0, 1, 1, 4, 5, 0, 0, 0, 
+	4, 0, 0, 0
 ]
 
 class << self
@@ -112,14 +140,18 @@ class << self
 	private :_record_typ_index_offsets, :_record_typ_index_offsets=
 end
 self._record_typ_index_offsets = [
-	0, 7, 9, 11, 13, 15, 18, 21, 
-	26, 32, 35, 38, 41, 44, 47, 55, 
-	61, 71, 73, 83, 93, 95, 97, 99, 
-	101, 103, 106, 117, 119, 121, 123, 125, 
-	128, 130, 132, 134, 136, 139, 141, 143, 
-	145, 147, 150, 152, 154, 164, 166, 168, 
-	170, 172, 175, 177, 179, 182, 191, 198, 
-	199, 205, 216, 218, 220, 222, 232, 234
+	0, 9, 11, 13, 15, 17, 20, 23, 
+	26, 29, 32, 35, 38, 43, 54, 56, 
+	63, 69, 71, 73, 75, 77, 80, 86, 
+	88, 95, 101, 103, 114, 126, 138, 140, 
+	142, 144, 146, 149, 152, 157, 164, 166, 
+	168, 170, 172, 175, 178, 181, 184, 187, 
+	190, 196, 206, 208, 218, 228, 230, 232, 
+	234, 236, 238, 241, 252, 254, 256, 258, 
+	260, 263, 265, 267, 269, 271, 274, 276, 
+	278, 288, 290, 292, 294, 296, 299, 301, 
+	303, 306, 315, 324, 330, 341, 343, 345, 
+	347, 357, 359, 361
 ]
 
 class << self
@@ -127,36 +159,52 @@ class << self
 	private :_record_typ_indicies, :_record_typ_indicies=
 end
 self._record_typ_indicies = [
-	1, 2, 3, 4, 4, 1, 0, 5, 
-	0, 1, 5, 6, 0, 7, 6, 7, 
-	1, 6, 8, 8, 0, 9, 10, 11, 
-	9, 0, 9, 12, 10, 11, 9, 0, 
-	13, 13, 0, 14, 14, 0, 15, 15, 
-	0, 16, 16, 0, 17, 17, 0, 18, 
-	19, 20, 21, 17, 17, 18, 0, 18, 
-	19, 20, 21, 18, 0, 19, 22, 24, 
-	25, 23, 19, 23, 23, 23, 0, 27, 
-	26, 28, 29, 31, 32, 30, 28, 30, 
-	30, 30, 0, 33, 34, 36, 37, 35, 
-	33, 35, 35, 35, 0, 39, 38, 40, 
-	0, 33, 40, 41, 0, 42, 41, 42, 
-	33, 41, 28, 29, 31, 32, 43, 28, 
-	43, 44, 43, 43, 0, 45, 0, 19, 
-	45, 46, 0, 47, 46, 47, 19, 46, 
-	48, 0, 18, 48, 49, 0, 50, 49, 
-	50, 18, 49, 51, 0, 9, 51, 52, 
-	0, 53, 52, 53, 9, 52, 56, 55, 
-	58, 57, 59, 22, 60, 61, 23, 59, 
-	23, 23, 23, 54, 62, 54, 59, 62, 
-	63, 54, 64, 63, 64, 59, 63, 66, 
-	65, 68, 67, 68, 66, 67, 70, 71, 
-	72, 73, 74, 75, 76, 70, 69, 1, 
-	2, 3, 4, 4, 1, 0, 77, 78, 
-	78, 78, 78, 78, 77, 28, 29, 31, 
-	32, 43, 28, 43, 79, 43, 43, 77, 
-	56, 55, 58, 57, 57, 81, 59, 22, 
-	60, 61, 23, 59, 23, 23, 23, 80, 
-	65, 80, 67, 80, 0
+	1, 2, 3, 4, 5, 4, 5, 1, 
+	0, 6, 0, 1, 6, 7, 0, 8, 
+	7, 8, 1, 7, 9, 9, 0, 10, 
+	10, 0, 11, 11, 0, 12, 12, 0, 
+	13, 13, 0, 14, 14, 0, 15, 16, 
+	17, 15, 0, 15, 18, 20, 16, 17, 
+	19, 15, 19, 19, 19, 0, 21, 18, 
+	22, 20, 23, 24, 25, 22, 0, 22, 
+	20, 23, 25, 22, 0, 26, 0, 22, 
+	26, 27, 0, 28, 27, 28, 22, 27, 
+	29, 30, 30, 30, 30, 0, 31, 29, 
+	22, 20, 23, 32, 25, 22, 0, 33, 
+	34, 34, 34, 34, 0, 22, 33, 22, 
+	20, 23, 25, 34, 22, 34, 34, 34, 
+	34, 0, 22, 20, 23, 32, 25, 30, 
+	22, 30, 30, 30, 30, 0, 22, 20, 
+	23, 24, 25, 19, 22, 19, 19, 19, 
+	19, 0, 35, 0, 15, 35, 36, 0, 
+	37, 36, 37, 15, 36, 38, 38, 0, 
+	39, 40, 41, 39, 0, 39, 40, 41, 
+	42, 42, 39, 0, 43, 0, 39, 43, 
+	44, 0, 45, 44, 45, 39, 44, 46, 
+	46, 0, 47, 47, 0, 48, 48, 0, 
+	49, 49, 0, 50, 50, 0, 50, 51, 
+	52, 53, 50, 0, 51, 54, 56, 57, 
+	55, 51, 55, 55, 55, 0, 59, 58, 
+	60, 61, 63, 64, 62, 60, 62, 62, 
+	62, 0, 65, 66, 68, 69, 67, 65, 
+	67, 67, 67, 0, 71, 70, 72, 0, 
+	65, 72, 73, 0, 74, 73, 74, 65, 
+	73, 60, 61, 63, 64, 75, 60, 75, 
+	76, 75, 75, 0, 77, 0, 51, 77, 
+	78, 0, 79, 78, 79, 51, 78, 80, 
+	0, 50, 80, 81, 0, 82, 81, 82, 
+	50, 81, 85, 84, 87, 86, 88, 54, 
+	89, 90, 55, 88, 55, 55, 55, 83, 
+	91, 83, 88, 91, 92, 83, 93, 92, 
+	93, 88, 92, 95, 94, 97, 96, 97, 
+	95, 96, 99, 100, 101, 102, 103, 104, 
+	105, 99, 98, 1, 2, 3, 4, 5, 
+	4, 5, 1, 0, 107, 107, 107, 107, 
+	107, 106, 60, 61, 63, 64, 75, 60, 
+	75, 108, 75, 75, 106, 85, 84, 87, 
+	86, 86, 110, 88, 54, 89, 90, 55, 
+	88, 55, 55, 55, 109, 94, 109, 96, 
+	109, 15, 109, 0
 ]
 
 class << self
@@ -164,17 +212,20 @@ class << self
 	private :_record_typ_trans_targs, :_record_typ_trans_targs=
 end
 self._record_typ_trans_targs = [
-	53, 0, 1, 3, 6, 2, 4, 5, 
-	7, 8, 37, 39, 9, 10, 11, 12, 
-	13, 14, 15, 16, 32, 34, 17, 26, 
-	27, 29, 17, 18, 19, 20, 56, 21, 
-	23, 19, 20, 56, 21, 23, 20, 55, 
-	22, 24, 25, 57, 26, 28, 30, 31, 
-	33, 35, 36, 38, 40, 41, 53, 42, 
-	53, 43, 60, 44, 45, 47, 46, 48, 
-	49, 50, 54, 51, 52, 53, 54, 58, 
-	59, 53, 61, 62, 63, 53, 56, 57, 
-	53, 53
+	81, 0, 1, 3, 6, 35, 2, 4, 
+	5, 7, 8, 9, 10, 11, 12, 13, 
+	30, 32, 14, 29, 81, 15, 16, 17, 
+	22, 19, 18, 20, 21, 23, 28, 24, 
+	25, 26, 27, 31, 33, 34, 36, 37, 
+	38, 40, 43, 39, 41, 42, 44, 45, 
+	46, 47, 48, 49, 65, 67, 50, 59, 
+	60, 62, 50, 51, 52, 53, 83, 54, 
+	56, 52, 53, 83, 54, 56, 53, 81, 
+	55, 57, 58, 84, 59, 61, 63, 64, 
+	66, 68, 69, 81, 70, 81, 71, 87, 
+	72, 73, 75, 74, 76, 77, 78, 82, 
+	79, 80, 81, 82, 85, 86, 88, 89, 
+	90, 91, 81, 83, 84, 81, 81
 ]
 
 class << self
@@ -182,17 +233,20 @@ class << self
 	private :_record_typ_trans_actions, :_record_typ_trans_actions=
 end
 self._record_typ_trans_actions = [
-	23, 0, 0, 0, 0, 0, 0, 0, 
+	27, 0, 0, 0, 0, 0, 0, 0, 
+	0, 0, 0, 0, 0, 0, 0, 0, 
+	0, 0, 0, 0, 29, 0, 0, 0, 
+	0, 0, 0, 0, 0, 0, 0, 0, 
+	0, 0, 0, 0, 0, 0, 0, 0, 
 	0, 0, 0, 0, 0, 0, 0, 0, 
 	0, 0, 0, 0, 0, 0, 1, 1, 
-	0, 0, 0, 0, 3, 28, 28, 3, 
-	3, 0, 5, 5, 0, 0, 0, 0, 
-	0, 0, 0, 46, 0, 0, 0, 0, 
-	0, 0, 0, 0, 0, 0, 21, 0, 
-	13, 0, 34, 0, 0, 0, 0, 0, 
-	0, 0, 37, 0, 0, 15, 43, 11, 
-	43, 25, 43, 11, 11, 31, 0, 40, 
-	19, 17
+	0, 0, 0, 0, 3, 32, 32, 3, 
+	3, 0, 5, 5, 0, 0, 0, 15, 
+	0, 0, 0, 47, 0, 0, 0, 0, 
+	0, 0, 0, 25, 0, 13, 0, 35, 
+	0, 0, 0, 0, 0, 0, 0, 38, 
+	0, 0, 17, 44, 11, 44, 44, 11, 
+	11, 44, 21, 0, 41, 23, 19
 ]
 
 class << self
@@ -206,8 +260,12 @@ self._record_typ_to_state_actions = [
 	0, 0, 0, 0, 0, 0, 0, 0, 
 	0, 0, 0, 0, 0, 0, 0, 0, 
 	0, 0, 0, 0, 0, 0, 0, 0, 
-	0, 0, 0, 0, 0, 7, 0, 0, 
-	0, 0, 0, 0, 0, 0, 0, 0
+	0, 0, 0, 0, 0, 0, 0, 0, 
+	0, 0, 0, 0, 0, 0, 0, 0, 
+	0, 0, 0, 0, 0, 0, 0, 0, 
+	0, 0, 0, 0, 0, 0, 0, 0, 
+	0, 7, 0, 0, 0, 0, 0, 0, 
+	0, 0, 0, 0
 ]
 
 class << self
@@ -221,8 +279,12 @@ self._record_typ_from_state_actions = [
 	0, 0, 0, 0, 0, 0, 0, 0, 
 	0, 0, 0, 0, 0, 0, 0, 0, 
 	0, 0, 0, 0, 0, 0, 0, 0, 
-	0, 0, 0, 0, 0, 9, 0, 0, 
-	0, 0, 0, 0, 0, 0, 0, 0
+	0, 0, 0, 0, 0, 0, 0, 0, 
+	0, 0, 0, 0, 0, 0, 0, 0, 
+	0, 0, 0, 0, 0, 0, 0, 0, 
+	0, 0, 0, 0, 0, 0, 0, 0, 
+	0, 9, 0, 0, 0, 0, 0, 0, 
+	0, 0, 0, 0
 ]
 
 class << self
@@ -235,19 +297,23 @@ self._record_typ_eof_trans = [
 	1, 1, 1, 1, 1, 1, 1, 1, 
 	1, 1, 1, 1, 1, 1, 1, 1, 
 	1, 1, 1, 1, 1, 1, 1, 1, 
-	1, 1, 55, 1, 55, 55, 55, 55, 
-	55, 55, 55, 55, 55, 0, 1, 78, 
-	78, 78, 81, 81, 82, 81, 81, 81
+	1, 1, 1, 1, 1, 1, 1, 1, 
+	1, 1, 1, 1, 1, 1, 1, 1, 
+	1, 1, 1, 1, 1, 1, 1, 1, 
+	1, 1, 1, 1, 1, 1, 84, 1, 
+	84, 84, 84, 84, 84, 84, 84, 84, 
+	84, 0, 1, 107, 107, 110, 110, 111, 
+	110, 110, 110, 110
 ]
 
 class << self
 	attr_accessor :record_typ_start
 end
-self.record_typ_start = 53;
+self.record_typ_start = 81;
 class << self
 	attr_accessor :record_typ_first_final
 end
-self.record_typ_first_final = 53;
+self.record_typ_first_final = 81;
 class << self
 	attr_accessor :record_typ_error
 end
@@ -256,12 +322,12 @@ self.record_typ_error = -1;
 class << self
 	attr_accessor :record_typ_en_main
 end
-self.record_typ_en_main = 53;
+self.record_typ_en_main = 81;
 
 
-# line 39 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rl"
+# line 45 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rl"
         
-# line 265 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rb"
+# line 331 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rb"
 begin
 	p ||= 0
 	pe ||= data.length
@@ -271,9 +337,9 @@ begin
 	act = 0
 end
 
-# line 40 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rl"
+# line 46 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rl"
         
-# line 277 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rb"
+# line 343 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rb"
 begin
 	_klen, _trans, _keys, _acts, _nacts = nil
 	_goto_level = 0
@@ -298,12 +364,12 @@ begin
 		_nacts -= 1
 		_acts += 1
 		case _record_typ_actions[_acts - 1]
-			when 6 then
+			when 5 then
 # line 1 "NONE"
 		begin
 ts = p
 		end
-# line 307 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rb"
+# line 373 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rb"
 		end # from state action switch
 	end
 	if _trigger_goto
@@ -379,74 +445,77 @@ when 0 then
   te = p
 		end
 when 1 then
-# line 16 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rl"
+# line 22 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rl"
 		begin
- @start = p 		end
+ @start_attr = p 		end
 when 2 then
-# line 16 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rl"
+# line 22 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rl"
 		begin
- @attr = data[(@start..p)] 		end
+ @end_attr = p 		end
 when 3 then
-# line 17 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rl"
+# line 23 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rl"
 		begin
- @start = p 		end
-when 4 then
-# line 17 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rl"
-		begin
- @attributes << { :name => @attr, :type => data[(@start..p)] } 		end
-when 7 then
+ @start_typ = p 		end
+when 6 then
 # line 1 "NONE"
 		begin
 te = p+1
 		end
-when 8 then
-# line 20 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rl"
+when 7 then
+# line 26 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rl"
 		begin
 act = 1;		end
-when 9 then
-# line 22 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rl"
+when 8 then
+# line 28 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rl"
 		begin
 act = 3;		end
-when 10 then
-# line 23 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rl"
+when 9 then
+# line 29 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rl"
 		begin
 act = 4;		end
-when 11 then
-# line 25 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rl"
+when 10 then
+# line 31 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rl"
 		begin
 act = 6;		end
-when 12 then
-# line 21 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rl"
+when 11 then
+# line 27 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rl"
 		begin
 te = p+1
 		end
+when 12 then
+# line 29 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rl"
+		begin
+te = p+1
+ begin  @attributes << { :name => data[(@start_attr..@end_attr-1)], :type => data[(@start_typ..te-1)] }  end
+		end
 when 13 then
-# line 24 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rl"
+# line 30 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rl"
 		begin
 te = p+1
 		end
 when 14 then
-# line 25 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rl"
+# line 31 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rl"
 		begin
 te = p+1
 		end
 when 15 then
-# line 20 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rl"
+# line 26 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rl"
 		begin
 te = p
 p = p - 1;		end
 when 16 then
-# line 23 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rl"
+# line 29 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rl"
 		begin
 te = p
-p = p - 1;		end
+p = p - 1; begin  @attributes << { :name => data[(@start_attr..@end_attr-1)], :type => data[(@start_typ..te-1)] }  end
+		end
 when 17 then
-# line 25 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rl"
+# line 31 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rl"
 		begin
 te = p
 p = p - 1;		end
 when 18 then
-# line 25 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rl"
+# line 31 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rl"
 		begin
  begin p = ((te))-1; end
 		end
@@ -454,6 +523,9 @@ when 19 then
 # line 1 "NONE"
 		begin
 	case act
+	when 4 then
+	begin begin p = ((te))-1; end
+ @attributes << { :name => data[(@start_attr..@end_attr-1)], :type => data[(@start_typ..te-1)] } end
 	when 6 then
 	begin begin p = ((te))-1; end
 end
@@ -462,7 +534,7 @@ end
 end
 end 
 			end
-# line 466 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rb"
+# line 538 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rb"
 			end # action switch
 		end
 	end
@@ -478,11 +550,11 @@ end
 		_nacts -= 1
 		_acts += 1
 		case _record_typ_actions[_acts - 1]
-when 5 then
+when 4 then
 # line 1 "NONE"
 		begin
 ts = nil;		end
-# line 486 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rb"
+# line 558 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rb"
 		end # to state action switch
 	end
 	if _trigger_goto
@@ -509,7 +581,7 @@ end
 	end
 	end
 
-# line 41 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rl"
+# line 47 "/home/talek/gitrepos/vorax-rb/lib/vorax/parser/grammars/record_typ.rl"
 		  end
 		  return @attributes
 		end

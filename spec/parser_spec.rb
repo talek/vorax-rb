@@ -4,6 +4,32 @@ include Vorax
 
 describe 'Parser' do
 
+	it 'should parse a basic record type' do# {{{
+		text = <<-STRING
+			type Employee is record (
+				Name varchar2(100),
+				Salary number(10,2),
+				Gender varchar2(1)
+			);
+		STRING
+		Parser.describe_record(text).should eq([{:name=>"Name", :type=>"varchar2"}, 
+																					  {:name=>"Salary", :type=>"number"}, 
+																					  {:name=>"Gender", :type=>"varchar2"}])
+	end# }}}
+
+	it 'should parse a record type with default clauses' do# {{{
+		text = <<-STRING
+			type Muci is record (
+			  typ varchar2(10) := my_func(sysdate, systimestamp),
+			  abc date default to_date('10.10.2010', 'dd.mm.yyyy'),
+			  xyz boolean default (my_func(sysdate))
+			);
+		STRING
+		Parser.describe_record(text).should eq([{:name=>"typ", :type=>"varchar2"}, 
+																					  {:name=>"abc", :type=>"date"}, 
+																					  {:name=>"xyz", :type=>"boolean"}])
+	end# }}}
+
   it 'should detect the end of a subprogram' do# {{{
     text = "end;"
     Parser.plsql_def(text)[:end_def].should be >0;
@@ -21,17 +47,17 @@ describe 'Parser' do
     Parser.plsql_def(text)[:end_def].should be >0;
   end# }}}
 
-	it 'shuld detect the end of a loop statement' do
+	it 'shuld detect the end of a loop statement' do# {{{
 		Parser.plsql_def("end loop;")[:type].should == 'END_LOOP'
 		Parser.plsql_def("end/*test*/ loop  ; ")[:type].should == 'END_LOOP'
 		Parser.plsql_def("end \"loop\"; ")[:type].should_not == 'END_LOOP'
-	end
+	end# }}}
 
-	it 'shuld detect the end of a if statement' do
+	it 'should detect the end of a if statement' do# {{{
 		Parser.plsql_def("end if;")[:type].should == 'END_IF'
 		Parser.plsql_def("end/*test*/ if  ; ")[:type].should == 'END_IF'
 		Parser.plsql_def("end \"if\"; ")[:type].should_not == 'END_IF'
-	end
+	end# }}}
 
   it 'should detect the definition of a plsql module' do# {{{
     text = "PACKAGE muci AS "
@@ -347,6 +373,17 @@ STRING
 		Parser.describe_for(text).should == {:cursor_var=>"p.cursor", :for_var=>"x", :expr=>nil, :end_pos=>22}
 		text = "for x in user.p.cursor loop "
 		Parser.describe_for(text).should == {:cursor_var=>"user.p.cursor", :for_var=>"x", :expr=>nil, :end_pos=>27}
+	end# }}}
+
+	it 'should get the next param position' do# {{{
+		text = "p1 varcha2(100) := myf('A', 1, f(y)), p2 DATE);"
+		Parser.next_argument(text).should == 37
+		text = "p1 varchar2(100) := myf('A', 1, f(y)));"
+		Parser.next_argument(text).should == 38
+		text = "p1 varchar2(100));"
+		Parser.next_argument(text).should == 17
+		text = "p1 varchar2(100)"
+		Parser.next_argument(text).should == 0 
 	end# }}}
 
 end

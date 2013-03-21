@@ -9,10 +9,6 @@ module Vorax
     SQLPLUS_TERMINATOR = END_LINE unless defined?(SQLPLUS_TERMINATOR)
     SEMI_COLON_TERMINATOR = /;/ unless defined?(SEMI_COLON_TERMINATOR)
     SLASH_TERMINATOR = Regexp.new('(?:' + END_LINE.to_s + '\s*\/[ \t]*' + END_LINE.to_s + ')') unless defined?(SLASH_TERMINATOR)
-    PLSQL_SPEC = /(?:\bpackage\b|\btype\b)/i
-    SUBPROG = /(?:\bfunction\b|\bprocedure\b)/i
-    BEGIN_MODULE = /(?:\bbegin\b)/i
-    END_MODULE = /(?:\bend\b)/i
     
     # Given an expression with  parenthesis, it is walking it so that to
     # keep track of the open/close paren, in a balanced way.
@@ -37,6 +33,35 @@ module Vorax
       end
       walker.walk
       text[start_pos, end_pos]
+    end
+
+    # Given a parameter list <e.g. p1 varchar2 := myf('abc', 1, f(y)), p2 boolean) >
+    # it gets the position of the next parameter in the list, which means the next
+    # comma not within balanced parens or the last closing bracket of the corresponding
+    # function/procedure. Of course a comma in a comment or a literal doesn't count.
+    def self.next_argument(text)
+      walker = PLSQLWalker.new(text)
+      level = 0
+      next_pos = 0
+      walker.register_spot(/[(]/) do |scanner|
+        level += 1
+      end
+      walker.register_spot(/[)]/) do |scanner|
+        level -= 1
+        if level < 0
+				  next_pos = scanner.pos
+        	scanner.terminate
+        end
+      end
+      walker.register_spot(/[,]/) do |scanner|
+				if level == 0
+					# end of function
+        	next_pos = scanner.pos
+        	scanner.terminate
+        end
+      end
+      walker.walk
+      next_pos
     end
 
     # Remove all comments from the provided statement. Pay attention that every
