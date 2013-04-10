@@ -6,10 +6,35 @@ module Vorax
 
   module Parser
 
-    # A PLSQL string scanner which is looking for interesting points within
-    # the provided source code. This is used instead of a fully fledged parser
-    # for speed considerations.
-    class PLSQLWalker
+    # A PLSQL string scanner which is looking for interesting patterns within
+    # the provided source code. The idea is to walk through the provided PLSQL
+    # code and to respond to some registered interesting spots, provided as 
+    # simple regular expressions.
+    #
+    # This approach is used instead of a fully fledged parser especially for 
+    # speed considerations.
+    #
+    # == Examples
+    # 
+    # Find the position of the first semicolon which is not part of a comment
+    # or a literal:
+    #
+    #   walker = PlsqlWalker.new(plsql_code)
+    #   walker.register_spot(/;/) do |scanner|
+    #     puts "Position: #{scanner.pos}"
+    #     scanner.terminate
+    #   end
+    #   walker.walk
+    #
+    # Find the position of the first double quote:
+    #
+    #   walker = PlsqlWalker.new(plsql_code, false)
+    #   walker.register_spot(/"/) do |scanner|
+    #     puts "Position: #{scanner.pos}"
+    #     scanner.terminate
+    #   end
+    #   walker.walk
+    class PlsqlWalker
 
       BEGIN_ML_COMMENT = /\/\*/ unless defined?(BEGIN_ML_COMMENT)
       END_ML_COMMENT = /\*\// unless defined?(END_ML_COMMENT)
@@ -19,11 +44,11 @@ module Vorax
       BEGIN_DOUBLE_QUOTING = /[\"]/ unless defined?(BEGIN_DOUBLE_QUOTING)
       BEGIN_SINGLE_QUOTING = /[']/ unless defined?(BEGIN_SINGLE_QUOTING)
 
-      # Create a new parse walker.
+      # Create a new PLSQL scan walker.
       #
       # @param text [String] the text to be walked/parsed
-      # @param create_default_spots [boolean] whenever or not to create default 
-      #  detection spots: multiline comments, singleline comments and quoted literals
+      # @param create_default_spots [Boolean] whenever or not to create default 
+      #  detection spots. These spots are: comments and literals.
       def initialize(text, create_default_spots=true)
         @text = text
         @matchers = []
@@ -38,18 +63,18 @@ module Vorax
         @ss
       end
 
-      # Register a new detection spot. The order of specifying these spots is important.
+      # Register a new detection spot.
       #
-      # @param pattern [Regexp] the spot regular expression
+      # @param pattern [Regexp] the regular expression defining the interesting spot
       # @param callback [Procedure] what to do when this spot is detected. The registered
       #   block is always called with the string scanner object. Please do not use "return"
       #   to exit from the defined block.
+      # @yield the scanner
       def register_spot(pattern, &callback)
         @matchers << {:pattern => pattern, :callback => callback}
       end
 
-      # Walk the text and trigger the registered callbacks. It returns the text which was
-      # successfully walked.
+      # Walk the plsql code and trigger the registered callbacks.
       def walk
         global_matcher = Regexp.new(@matchers.map { |e| e[:pattern].to_s }.join('|'), 
                                     Regexp::IGNORECASE)
@@ -117,7 +142,8 @@ module Vorax
         end
       end
 
-      private
+
+    private
 
       def create_default_spots
         # define a multiline comment spot

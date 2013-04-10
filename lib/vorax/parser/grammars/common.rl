@@ -26,6 +26,20 @@ identifier_level3 = identifier '.' identifier_level2;
 qualified_identifier = identifier_level3 | identifier_level2 | identifier;
 
 # define intereseting keywords
+K_OVERRIDING=/overriding/i;
+K_FINAL=/final/i;
+K_INSTANTIABLE=/instantiable/i;
+K_MAP=/map/i;
+K_ORDER=/order/i;
+K_SORT=/sort/i;
+K_MEMBER=/member/i;
+K_CONSTRUCTOR=/constructor/i;
+K_STATIC=/static/i;
+K_SELF=/self/i;
+K_RESULT=/result/i;
+K_AUTHID=/authid/i;
+K_CURRENT_USER=/current_user/i;
+K_DEFINER=/definer/i;
 K_DEFAULT=/default/i;
 K_RECORD=/record/i;
 K_ROWTYPE=/%rowtype/i;
@@ -108,5 +122,9 @@ K_UNDEFINE = /undefine/i | /undefin/i | /undefi/i | /undef/i;
 K_VARIABLE = /variable/i | /variabl/i | /variab/i | /varia/i | /vari/i | /var/i;
 K_WHENEVER = /whenever/i;
 K_XQUERY = /xquery/i;
+
+# common constructs
+create_or_replace = K_CREATE ws+ (K_OR ws+ K_REPLACE ws+)?;
+auth_id = K_AUTHID ws+ (K_CURRENT_USER | K_DEFINER) ws+;
 
 }%%

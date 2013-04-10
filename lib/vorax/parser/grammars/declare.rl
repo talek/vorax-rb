@@ -4,82 +4,62 @@ machine declare;
 
 include common "common.rl";
 
-action start_identifier {
-  @start = p
-}
-
-action end_identifier {
-  @end = p - 1
-}
-
 action tail {
-	p = p - 1
-	te = p
+	start = p
+	text = data[start..eof]
+	pos = 0
+	walker = PlsqlWalker.new(text)
+	walker.register_spot(/;/) do |scanner|
+		pos = scanner.pos
+	  scanner.terminate
+	end
+	walker.walk
+	if pos > 0
+  	p = p + pos
+    te = p
+  end
 }
 
-prev_terminator = (';' ws*) | (ws+ (K_AS | K_IS | K_DECLARE) ws+);
-next_terminator = ';'  | (ws+ (K_AS | K_IS) ws+);
-id = identifier >start_identifier %end_identifier;
-variable_name = id - (K_CURSOR | K_TYPE | K_FUNCTION | K_PROCEDURE | K_END | K_PRAGMA);
-variable_type = qualified_identifier (K_ROWTYPE | K_VARTYPE)?;
+id = identifier >{@start = p} %{@identifier = data[@start...p]};
+keywords = K_CURSOR | K_FUNCTION | K_PROCEDURE | K_TYPE | K_PRAGMA | K_EXCEPTION | K_BEGIN;
+name = (id - keywords) >{@declared_at = p + 1};
+variable_type = ((qualified_identifier - keywords) (K_ROWTYPE | K_VARTYPE)?) >{@start = p} @{@type = data[@start..p]};
 
-constant = prev_terminator 
-             (id ws+ K_CONSTANT ws+ 
-               (qualified_identifier >{@start_qi = p} %{@end_qi = p - 1})
-               (( any )* :>> ';') %tail
-             ) >{@start_capture = p};
-
-exception = prev_terminator 
-              (variable_name ws+ K_EXCEPTION
-               (( any )* :>> ';') %tail
-              ) >{@start_capture = p};
-
-cursor = prev_terminator 
-           (K_CURSOR ws+ id ws+ K_IS ws+ 
-              (( any )* :>> ';') %tail
-           ) >{@start_capture = p};
-
-type = prev_terminator 
-         (K_TYPE ws+ id ws+ K_IS ws+
-					  (qualified_identifier >{@start_qi = p} %{@end_qi = p - 1})
-            (( any )* :>> ';') %tail
-         ) >{@start_capture = p};
-
-var = prev_terminator 
-				(
-					variable_name ws+ (variable_type >{@start_qi = p} %{@end_qi = p - 1})
-					(( any )* :>> ';') %tail
-				) >{@start_capture = p};
-
-function = prev_terminator 
-             (
-               K_FUNCTION ws+ id
-							 (( any )* :>> next_terminator) %tail
-             ) >{@start_capture = p};
-
-procedure = prev_terminator 
-             (
-               K_PROCEDURE ws+ id
-							 (( any )* :>> next_terminator) %tail
-             ) >{@start_capture = p};
+cursor = K_CURSOR ws+ name ws+ K_IS ws+ %tail;
+type = K_TYPE ws+ name ws+ K_IS ws+ variable_type %tail;
+function = K_FUNCTION ws+ name %tail;
+procedure = K_PROCEDURE ws+ name %tail;
+pragma = K_PRAGMA ws+ %tail;
+begin = K_BEGIN ws+ %tail;
+named_item = name ws+ ((K_EXCEPTION) %{@kind=:exception}
+												|
+												(K_CONSTANT %{@kind=:constant} ws+ variable_type) 
+												|
+												variable_type %{@kind=:variable}) %tail;
 
 main := |*
   squoted_string;
   dquoted_string;
   comment;
-  constant => { add_item(ConstantItem.new(name, type)) };
-  exception => { add_item(ExceptionItem.new(name)) };
-  cursor => { add_item(CursorItem.new(name, capture(te))) };
-  type => { add_item(TypeItem.new(name, type, capture(te))) };
-  var => { add_item(VariableItem.new(name, type)) };
-  function => { add_item(FunctionItem.new(capture(te))) };
-  procedure => { add_item(ProcedureItem.new(capture(te))) };
+  pragma => {};
+  begin => {};
+  cursor => { @items << CursorItem.new(@declared_at, @identifier, data[ts...te]) };
+  type => { @items << TypeItem.new(@declared_at, @identifier, @type, data[ts...te]) };
+  function => { @items << FunctionItem.new(@declared_at, data[ts...te]) };
+  procedure => { @items << ProcedureItem.new(@declared_at, data[ts...te]) };
+  named_item => {
+  		if @kind == :exception
+  		  @items << ExceptionItem.new(@declared_at, @identifier)
+  		elsif @kind == :constant
+        @items << ConstantItem.new(@declared_at, @identifier, @type)
+  		elsif @kind == :variable
+				@items << VariableItem.new(@declared_at, @identifier, @type)
+  		end
+  	};
   any => {};
 *|;
 
 }%%
-
-require 'set'
 
 module Vorax
 
@@ -91,7 +71,7 @@ module Vorax
       attr_reader :items
 
 			def initialize(declare_code)
-			  @code = Parser.remove_all_comments(declare_code)
+			  @code = declare_code
 			  walk(@code)
 			end
 
@@ -99,6 +79,7 @@ module Vorax
       #
       # param data [String] the package spec
       def walk(data)
+        @declared_at = nil
         @items = []
         if data
           eof = data.length
@@ -107,25 +88,6 @@ module Vorax
           %% write exec;
         end
       end
-
-      private
-
-			def capture(te)
-				@code[@start_capture..te]
-			end
-
-			def name
-			  @code[@start..@end]
-			end
-
-			def type
-			  @code[(@start_qi..@end_qi)] if @start_qi && @end_qi
-			end
-
-			def add_item(item)
-				@items << item
-				@start_qi = @end_qi = nil
-			end
 
     end
 

@@ -16,7 +16,7 @@ module Vorax
     # @param text [String] the string to be walked
     # @return [String] the paren expression
     def self.walk_balanced_paren(text)
-      walker = PLSQLWalker.new(text)
+      walker = PlsqlWalker.new(text)
       level = 0
       start_pos = 0
       end_pos = 0
@@ -40,7 +40,7 @@ module Vorax
     # comma not within balanced parens or the last closing bracket of the corresponding
     # function/procedure. Of course a comma in a comment or a literal doesn't count.
     def self.next_argument(text)
-      walker = PLSQLWalker.new(text)
+      walker = PlsqlWalker.new(text)
       level = 0
       next_pos = 0
       walker.register_spot(/[(]/) do |scanner|
@@ -73,7 +73,7 @@ module Vorax
     def self.remove_all_comments(statement)
       comment_areas = []
       result = statement
-      walker = PLSQLWalker.new(statement, false)
+      walker = PlsqlWalker.new(statement, false)
       
       callback = lambda do |scanner, end_pattern|
         start_pos = scanner.pos - scanner.matched.length
@@ -85,12 +85,12 @@ module Vorax
         end
       end
 
-      walker.register_spot(PLSQLWalker::BEGIN_ML_COMMENT) do |scanner|
-        callback.call(scanner, PLSQLWalker::END_ML_COMMENT)
+      walker.register_spot(PlsqlWalker::BEGIN_ML_COMMENT) do |scanner|
+        callback.call(scanner, PlsqlWalker::END_ML_COMMENT)
       end
 
-      walker.register_spot(PLSQLWalker::BEGIN_SL_COMMENT) do |scanner|
-        callback.call(scanner, PLSQLWalker::END_SL_COMMENT)
+      walker.register_spot(PlsqlWalker::BEGIN_SL_COMMENT) do |scanner|
+        callback.call(scanner, PlsqlWalker::END_SL_COMMENT)
       end
 
       walker.register_default_plsql_quoting_spot()
@@ -129,11 +129,11 @@ module Vorax
       stmt = Parser.remove_all_comments(statement[(0...position)])
       stmt.reverse!
       level = 0
-      walker = PLSQLWalker.new(stmt, false)
+      walker = PlsqlWalker.new(stmt, false)
       arg_owner = ""
 
       squote_fallback = lambda do |scanner|
-        scanner.skip_until(PLSQLWalker::BEGIN_SINGLE_QUOTING)
+        scanner.skip_until(PlsqlWalker::BEGIN_SINGLE_QUOTING)
         if scanner.matched == "'"
           begin
             scanner.skip_until(/\'+/)
@@ -293,7 +293,7 @@ module Vorax
       start_pos = 0
       end_pos = 0
 
-      walker = PLSQLWalker.new(script_content)
+      walker = PlsqlWalker.new(script_content)
 
       walker.register_spot(Parser::SEMI_COLON_TERMINATOR) do |scanner|
         type = Parser.statement_type(scanner.string[(start_pos..scanner.pos)])

@@ -30,50 +30,6 @@ describe 'Parser' do
 																					  {:name=>"xyz", :type=>"boolean"}])
 	end# }}}
 
-  it 'should detect the end of a subprogram' do# {{{
-    text = "end;"
-    Parser.plsql_def(text)[:end_def].should be >0;
-    text = "end if;"
-    Parser.plsql_def(text)[:end_type].should_not == 'END';
-    text = "end loop;"
-    Parser.plsql_def(text)[:type].should_not == 'END' ;
-    text = "end my_func;"
-    Parser.plsql_def(text)[:end_def].should be >0;
-    text = "end/*test*/my_prog;"
-    Parser.plsql_def(text)[:end_def].should be >0;
-    text = "end/*test*/\"my_special_prog\";"
-    Parser.plsql_def(text)[:end_def].should be >0;
-    text = "end is_AdminBasket;\r\n\r\n  function get_BasketId(pi_impkey in integer, pi_tablename in varchar2)\r\n    "
-    Parser.plsql_def(text)[:end_def].should be >0;
-  end# }}}
-
-	it 'shuld detect the end of a loop statement' do# {{{
-		Parser.plsql_def("end loop;")[:type].should == 'END_LOOP'
-		Parser.plsql_def("end/*test*/ loop  ; ")[:type].should == 'END_LOOP'
-		Parser.plsql_def("end \"loop\"; ")[:type].should_not == 'END_LOOP'
-	end# }}}
-
-	it 'should detect the end of a if statement' do# {{{
-		Parser.plsql_def("end if;")[:type].should == 'END_IF'
-		Parser.plsql_def("end/*test*/ if  ; ")[:type].should == 'END_IF'
-		Parser.plsql_def("end \"if\"; ")[:type].should_not == 'END_IF'
-	end# }}}
-
-  it 'should detect the definition of a plsql module' do# {{{
-    text = "PACKAGE muci AS "
-    result = Parser.plsql_def(text)
-    result[:end_def].should be >0
-    result[:name].should == 'muci'
-    result[:type].should == 'SPEC'
-    text = "package\nbody muci.buci/* bla bla*/ as "
-    result = Parser.plsql_def(text)
-    result[:end_def].should be >0;
-    result[:name].should == 'muci.buci'
-    result[:type].should == 'BODY'
-    text = "package bdy muci.buci/* bla bla*/ as "
-    Parser.plsql_def(text)[:end_def].should be <0;
-  end# }}}
-
   it 'should work with balanced paren' do# {{{
     Parser.walk_balanced_paren('(a(b)c)').should eq("(a(b)c)")
     Parser.walk_balanced_paren('(a(b)(xyz)c)').should eq("(a(b)(xyz)c)")
@@ -357,23 +313,6 @@ STRING
   	Parser.current_statement(text, 10, :plslq_blocks => true, :sqlplus_commands => true).
   		should eq({:statement=>"exec dbms_crypto.encrypt(", :range=>0...25})
   end# }}}
-
-	it 'should detect a for statement' do# {{{
-		text = "for x in (select * from dual) loop "
-		Parser.describe_for(text).should == {:cursor_var=>nil, :for_var=>"x", :expr=>"(select * from dual)", :end_pos=>34}
-		text = "for x in l_cursor loop "
-		Parser.describe_for(text).should == {:cursor_var=>"l_cursor", :for_var=>"x", :expr=>nil, :end_pos=>22}
-		text = "for x in reverse 1..10 loop "
-		Parser.describe_for(text).should == {:cursor_var=>nil, :for_var=>"x", :expr=>nil, :end_pos=>27}
-		text = "for x in(select * from dual)loop "
-		Parser.describe_for(text).should == {:cursor_var=>nil, :for_var=>"x", :expr=>"(select * from dual)", :end_pos=>32}
-		text = "for x in reverse 1..10 loops "
-		Parser.describe_for(text)[:end_pos].should == -1
-		text = "for x in p.cursor loop "
-		Parser.describe_for(text).should == {:cursor_var=>"p.cursor", :for_var=>"x", :expr=>nil, :end_pos=>22}
-		text = "for x in user.p.cursor loop "
-		Parser.describe_for(text).should == {:cursor_var=>"user.p.cursor", :for_var=>"x", :expr=>nil, :end_pos=>27}
-	end# }}}
 
 	it 'should get the next param position' do# {{{
 		text = "p1 varcha2(100) := myf('A', 1, f(y)), p2 DATE);"
