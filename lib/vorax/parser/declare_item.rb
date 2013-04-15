@@ -186,7 +186,7 @@ module Vorax
 			attr_reader :args
 
 			# @return [String] the name of the subprogram
-			attr_reader :name
+			attr_accessor :name
 			
 			# @return [String] the kind of the subprogram: "procedure" or "function"
 			attr_reader :kind
@@ -204,15 +204,18 @@ module Vorax
 			#
 			# @param declared_at [Integer] the absolute position where the variable is declared
 			# @param text [String] the definition of the subprogram as text
-			def initialize(declared_at, text)
+			def initialize(declared_at, text, describe=true)
 				super(declared_at)
 				@text = text
-        SubprogItem.describe(text).tap do |m|
-          @name = m[:name]
-          @kind = m[:kind]
-          @args = m[:args]
-          @return_type = m[:return_type]
-          @declare_start_pos = m[:declare_start_pos]
+        @args = []
+        if describe
+					SubprogItem.describe(text).tap do |m|
+						@name = m[:name]
+						@kind = m[:kind]
+						@args = m[:args]
+						@return_type = m[:return_type]
+						@declare_start_pos = m[:declare_start_pos]
+					end
 				end
 			end
 
@@ -228,8 +231,8 @@ module Vorax
 			end
 
       def ==(obj)
-        self.name == obj.name && self.args == obj.args &&
-        	self.kind == obj.kind #&& self.declare_start_pos == obj.declare_start_pos
+        self.name.to_s == obj.name.to_s #&& self.args == obj.args &&
+        	#self.kind.to_s == obj.kind.to_s && self.declare_start_pos == obj.declare_start_pos
       end
 
 		end

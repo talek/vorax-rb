@@ -459,23 +459,61 @@ describe 'region' do
     text = File.open('spec/sql/test.pkg', 'rb') { |file| file.read }
     structure = Parser::PlsqlStructure.new(text)
 		region = structure.regions.children[1].content
-		expected = [Parser::ProcedureItem.new(243, "procedure private_proc(p integer) as\n\n    l_var varchar2(100);\n\n    /* local function */\n    function abc return boolean as\n    begin\n      return true;\n    end;\n    \n    procedure xyz as\n    begin\n      null;\n    end;\n\n  begin\n    l_var := 'abc';\n    for x in (select * from v$session) loop\n      dbms_output.put_line(x.);\n      if x = 'X' then\n        dbms_output.put_line('Great!');\n      end if;\n      if 1 = 0 then\n        if 1 = 1 then\n          for y in (select * from cat) loop\n            dbms_output.put_line(y.table_name);\n            dbms_output.put_line('------------------------------');\n          end loop;\n          dbms_output.put_line('not here ever!');\n        end if;\n        if 1 = 0 then\n          dbms_output.put_line('OMG!');\n        end if;\n      end if;\n      null;\n    end loop;\n    select dummy into l_var from dual;\n    if l_var is not null then\n      dbms_output.put_line('yessss baby!');\n    end if;\n    dbms_output.put_line('a loop is following');\n    loop\n      exit when l_var = 'X';\n      dbms_output.put_line('should not be here');\n    end loop;\n    dbms_output.put_line('that''s all folks!');\n  end;\n "),
-                Parser::ProcedureItem.new(1383, "procedure test(p1 integer) as\n  begin\n    dbms_output.put_line('just a test');\n    begin\n      null;\n    exception\n      when others then\n        null;\n    end;\n  end;\n "),
-								Parser::FunctionItem.new(1553, "function muci(x varchar2, y clob) return boolean as\n  begin\n    return false;\n  end;\n "),
-								Parser::VariableItem.new(198, "lg_var_private", "varchar2")]
+		expected = [Parser::ProcedureItem.new(243, "procedure private_proc(p integer) as\n\n    l_var varchar2(100);\n\n    /* local function */\n    function abc return boolean as\n    begin\n      return true;\n    end;\n    \n    procedure xyz as\n    begin\n      null;\n    end;\n\n  begin\n    l_var := 'abc';\n    for x in (select * from v$session) loop\n      dbms_output.put_line(x.);\n      if x = 'X' then\n        dbms_output.put_line('Great!');\n      end if;\n      if 1 = 0 then\n        if 1 = 1 then\n          for y in (select * from cat) loop\n            dbms_output.put_line(y.table_name);\n            dbms_output.put_line('------------------------------');\n          end loop;\n          dbms_output.put_line('not here ever!');\n        end if;\n        if 1 = 0 then\n          dbms_output.put_line('OMG!');\n        end if;\n      end if;\n      null;\n    end loop;\n    select dummy into l_var from dual;\n    if l_var is not null then\n      dbms_output.put_line('yessss baby!');\n    end if;\n    dbms_output.put_line('a loop is following');\n    loop\n      exit when l_var = 'X';\n      dbms_output.put_line('should not be here');\n    end loop;\n    dbms_output.put_line('that''s all folks!');\n  end;\n ", false).tap { |i| i.name = "private_proc" },
+								Parser::VariableItem.new(198, "lg_var_private", "varchar2"),
+                Parser::ProcedureItem.new(1383, "procedure test(p1 integer) as\n  begin\n    dbms_output.put_line('just a test');\n    begin\n      null;\n    exception\n      when others then\n        null;\n    end;\n  end;\n ", false).tap { |i| i.name = "test" },
+								Parser::FunctionItem.new(1553, "function muci(x varchar2, y clob) return boolean as\n  begin\n    return false;\n  end;\n ", false).tap {|i| i.name="muci"}]
 		region.declared_items.should == expected
 	end# }}}
 
-	it 'should get all items for a function' do
+	it 'should get all items for a function' do# {{{
     text = File.open('spec/sql/person_type.bdy', 'rb') { |file| file.read }
     structure = Parser::PlsqlStructure.new(text)
 		region = structure.regions.children.first.children.first.content
-		expected = [Parser::FunctionItem.new(176, "function my_func(p1 boolean, p2 integer := (1+2)) return boolean as\n\t\tbegin\n\t\t\treturn false;\n\t\tend;\n "),
+		expected = [Parser::FunctionItem.new(185, "function my_func(p1 boolean, p2 integer := (1+2)) return boolean as\n\t\tbegin\n\t\t\treturn false;\n\t\tend;\n ", false).tap {|i| i.name="my_func"},
                 Parser::VariableItem.new(150, "l_local", "varchar2"),
 								Parser::VariableItem.new(279, "l_muci", "integer"),
 								Parser::ArgumentItem.new(66, "SELF", :direction=>:inout, :has_default=>false, :data_type=>"shape"),
 								Parser::ArgumentItem.new(92, "name", :direction=>:in, :has_default=>false, :data_type=>"VARCHAR2")]
     region.declared_items.should == expected
+	end# }}}
+
+	it 'should get all items for a package body' do# {{{
+    text = File.open('spec/sql/inter_global.pkg', 'rb') { |file| file.read }
+    structure = Parser::PlsqlStructure.new(text)
+		region = structure.regions.children[1].content
+		expected = [Parser::ProcedureItem.new(243, "procedure private_proc(p integer) as\n\n    l_var varchar2(100);\n\n    /* local function */\n    function abc return boolean as\n    begin\n      return true;\n    end;\n    \n    procedure xyz as\n    begin\n      null;\n    end;\n\n  begin\n    l_var := 'abc';\n    for x in (select * from v$session) loop\n      dbms_output.put_line(x.);\n      if x = 'X' then\n        dbms_output.put_line('Great!');\n      end if;\n      if 1 = 0 then\n        if 1 = 1 then\n          for y in (select * from cat) loop\n            dbms_output.put_line(y.table_name);\n            dbms_output.put_line('------------------------------');\n          end loop;\n          dbms_output.put_line('not here ever!');\n        end if;\n        if 1 = 0 then\n          dbms_output.put_line('OMG!');\n        end if;\n      end if;\n      null;\n    end loop;\n    select dummy into l_var from dual;\n    if l_var is not null then\n      dbms_output.put_line('yessss baby!');\n    end if;\n    dbms_output.put_line('a loop is following');\n    loop\n      exit when l_var = 'X';\n      dbms_output.put_line('should not be here');\n    end loop;\n    dbms_output.put_line('that''s all folks!');\n  end;\n", false).tap {|i| i.name="private_proc"},
+                Parser::VariableItem.new(198, "lg_var_private", "varchar2"),
+                Parser::ProcedureItem.new(1409, "procedure test(p1 integer) as\n  begin\n    dbms_output.put_line('just a test');\n    begin\n      null;\n    exception\n      when others then\n        null;\n    end;\n  end;\n", false).tap {|i| i.name="test"},
+                Parser::VariableItem.new(1373, "lg_muci", "varchar2"),
+                Parser::FunctionItem.new(1605, "function muci(x varchar2, y clob) return boolean as\n  begin\n    return false;\n  end;\n", false).tap {|i| i.name="muci"},
+                Parser::VariableItem.new(1570, "lg_buci", "varchar2"),
+                Parser::VariableItem.new(1684, "lg_whatever", "boolean")]
+		region.declared_items.should == expected
+	end# }}}
+
+	it 'should get all items for a function' do# {{{
+    text = File.open('spec/sql/inter_var.fnc', 'rb') { |file| file.read }
+    structure = Parser::PlsqlStructure.new(text)
+		region = structure.regions.children.first.content
+		expected = [Parser::ProcedureItem.new(89, "procedure muci as\n\tbegin\n\t\tnull;\n\tend;\n", false).tap { |i| i.name = "muci"},
+                Parser::VariableItem.new(54, "l_local", "varchar2"),
+                Parser::ProcedureItem.new(148, "procedure xyz as\n\tbegin\n\t\tnull;\n\tend;\n", false).tap { |i| i.name = "xyz"},
+                Parser::VariableItem.new(121, "l_bla", "integer"),
+                Parser::VariableItem.new(179, "l_bubu", "boolean")]
+		region.declared_items.should == expected
+	end# }}}
+
+	it 'should get all items for an incomplete function' do
+    text = File.open('spec/sql/incomplete1.fnc', 'rb') { |file| file.read }
+    structure = Parser::PlsqlStructure.new(text)
+		region = structure.regions.children.first.content
+		expected = [Parser::ProcedureItem.new(89, "procedure muci as\n\tbegin\n\t\tnull;\n\tend;\n", false).tap { |i| i.name = "muci"},
+                Parser::VariableItem.new(54, "l_local", "varchar2"),
+                Parser::ProcedureItem.new(148, "procedure xyz as\n\tbegin\n\t\tnull;\n\tend;\n", false).tap { |i| i.name = "xyz"},
+                Parser::VariableItem.new(121, "l_bla", "integer"),
+                Parser::VariableItem.new(179, "l_bubu", "boolean")]
+		p structure.region_at(205)
 	end
 
 end

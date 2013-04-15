@@ -132,13 +132,9 @@ module Vorax
       # Register a spot to walk a single quoted literal.
       def register_default_single_quoting_spot
         register_spot(BEGIN_SINGLE_QUOTING) do |scanner|
-          collector = ''
           begin
-            if match = scanner.scan_until(/\'+/) 
-              collector << match
-            end
-          end while (scanner.matched != "'" && !scanner.eos?)
-          collector
+            scanner.scan_until(/\'+/) 
+          end while (!scanner.matched.nil? && scanner.matched != "'" && !scanner.eos?)
         end
       end
 
