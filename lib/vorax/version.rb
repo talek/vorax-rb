@@ -2,6 +2,6 @@
 
 module Vorax
 
-  VERSION = '0.4.2' unless defined?(VERSION)
+  VERSION = '0.5.0' unless defined?(VERSION)
 
 end
