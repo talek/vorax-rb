@@ -1,6 +1,21 @@
 set verify off
 set feedback off
 
+prompt Create Address_typ type
+create or replace type address_typ as object (
+	street varchar2(100),
+	city varchar2(50)
+);
+/
+
+prompt Create Person_typ type
+create or replace type person_typ as object (
+	name varchar2(100),
+	address address_typ
+);
+/
+
+
 prompt Create DEPARTMENTS_ID sequence
 create sequence departments_id;
 

@@ -202,18 +202,21 @@ module Vorax
 							start_pointer = subregion.end_pos
             end
           end
-					declare_section = content[start_pointer...declare_end_pos-1]
-					# find the first "begin" keyword
-					walker = PlsqlWalker.new(declare_section)
-					walker.register_spot(/\bbegin\b/i) do |scanner|
-						begin_pos = scanner.pos - scanner.matched.length
-						declare_section = declare_section[0...begin_pos]
-						scanner.terminate
-					end
-					walker.walk
-					named_items = Parser::Declare.new(declare_section).items
-					named_items.each { |i| i.declared_at += start_pointer }
-					@items.push(*named_items)
+				  stop_position = declare_end_pos ? declare_end_pos - 1 : content.length
+					declare_section = content[start_pointer...stop_position]
+					unless declare_section.empty?
+						# find the first "begin" keyword
+						walker = PlsqlWalker.new(declare_section)
+						walker.register_spot(/\bbegin\b/i) do |scanner|
+							begin_pos = scanner.pos - scanner.matched.length
+							declare_section = declare_section[0...begin_pos]
+							scanner.terminate
+						end
+						walker.walk
+						named_items = Parser::Declare.new(declare_section).items
+						named_items.each { |i| i.declared_at += start_pointer }
+						@items.push(*named_items)
+          end
           return @items
         end
       end

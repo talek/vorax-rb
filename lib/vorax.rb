@@ -27,7 +27,14 @@ module Vorax
       @logger.add(Logger::DEBUG, nil, 'rby') { message }
     end
   end
- 
+
+	# Get a hash which can be used to store additional 
+	# properties. This is used by Vorax vim logic in order
+	# to cache values accross vim function calls.
+	def self.extra
+		@extra || @extra = Hash.new
+	end
+
   # Raised when another SqlPlus is already executing.
   class AnotherExecRunning < StandardError; end
 

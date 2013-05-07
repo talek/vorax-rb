@@ -68,7 +68,6 @@ module Vorax
           return collect
         end
       end
-
       
     end
 

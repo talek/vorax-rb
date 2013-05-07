@@ -504,7 +504,7 @@ describe 'region' do
 		region.declared_items.should == expected
 	end# }}}
 
-	it 'should get all items for an incomplete function' do
+	it 'should get all items for an incomplete function' do# {{{
     text = File.open('spec/sql/incomplete1.fnc', 'rb') { |file| file.read }
     structure = Parser::PlsqlStructure.new(text)
 		region = structure.regions.children.first.content
@@ -513,8 +513,31 @@ describe 'region' do
                 Parser::ProcedureItem.new(148, "procedure xyz as\n\tbegin\n\t\tnull;\n\tend;\n", false).tap { |i| i.name = "xyz"},
                 Parser::VariableItem.new(121, "l_bla", "integer"),
                 Parser::VariableItem.new(179, "l_bubu", "boolean")]
-		p structure.region_at(205)
-	end
+		region.declared_items.should == expected
+	end# }}}
+
+	it 'should work with an incomplete package' do# {{{
+    text = File.open('spec/sql/admin_tk_incomplete.pkg', 'rb') { |file| file.read }
+    structure = Parser::PlsqlStructure.new(text)
+		region = structure.regions.children[1].content
+		expected = [Parser::FunctionItem.new(27984, "function is_AdminBasket(pi_itmidn in integer) return integer is\n    l_result integer;\n  begin\n    l_re\n", false).tap { |i| i.name = 'is_AdminBasket' },
+                Parser::ConstantItem.new(27259, "INVALID_UNKNOWN", "integer"),
+								Parser::ConstantItem.new(27302, "TREKAGNST", "integer"),
+                Parser::ConstantItem.new(27345, "TRECTD", "integer"),
+                Parser::ConstantItem.new(27388, "TREASSFIX", "integer"),
+								Parser::ConstantItem.new(27426, "TRETRDBOK", "integer"),
+								Parser::ConstantItem.new(27464, "TREASSFLA", "integer"),
+								Parser::ConstantItem.new(27502, "TREPRVEQU", "integer"),
+								Parser::ConstantItem.new(27539, "TREFSP", "integer"),
+								Parser::ConstantItem.new(27576, "TREFNDSPE", "integer"),
+								Parser::ConstantItem.new(27614, "TREFNDPUB", "integer"),
+								Parser::ConstantItem.new(27652, "TREFNDADM", "integer"),
+								Parser::ConstantItem.new(27689, "TRECTDACC", "integer"),
+								Parser::ConstantItem.new(27727, "TREBNKNSTACC", "integer"),
+								Parser::ConstantItem.new(27768, "TREBNKNST", "integer"),
+								Parser::VariableItem.new(27805, "ErrMsgNo", "integer")]
+		region.declared_items.should == expected
+	end# }}}
 
 end
 

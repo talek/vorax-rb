@@ -125,8 +125,10 @@ module Vorax
     # @param position [int] the position index where the 
     #   argument should be given
     def self.argument_belongs_to(statement, position = nil)
+      Vorax.debug("statement=#{statement.inspect} positon=#{position}")
       position = statement.length unless position
       stmt = Parser.remove_all_comments(statement[(0...position)])
+      Vorax.debug("interesting part=#{stmt}")
       stmt.reverse!
       level = 0
       walker = PlsqlWalker.new(stmt, false)
