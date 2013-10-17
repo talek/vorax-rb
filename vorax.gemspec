@@ -1,7 +1,7 @@
 Gem::Specification.new do |gem|
 
   gem.name          = "vorax"
-  gem.version       = "5.1"
+  gem.version       = "5.3"
   gem.authors       = ["Alexandru Tica"]
   gem.email         = ["alexandru.tica@gmail.com"]
   gem.description   = %q{Dummy dependencies package for Vorax.}
@@ -13,6 +13,6 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency "nokogiri"
   gem.add_runtime_dependency "childprocess"
   gem.add_runtime_dependency "rubytree"
-  gem.add_runtime_dependency "ferret"
+  gem.add_runtime_dependency "sdsykes-ferret"
 
 end
