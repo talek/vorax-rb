@@ -1,7 +1,7 @@
 Gem::Specification.new do |gem|                                                                                                                                                                                    
 
   gem.name          = "vorax"
-  gem.version       = "5.3.1"
+  gem.version       = "5.3.2"
   gem.authors       = ["Alexandru Tica"]
   gem.email         = ["alexandru.tica@gmail.com"]
   gem.licenses      = ["MIT"]
